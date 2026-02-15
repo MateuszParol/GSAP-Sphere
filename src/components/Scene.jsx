@@ -5,6 +5,7 @@ import Starfield from './Environment/Stars'
 import ParticleSphere from './Sphere/ParticleSphere'
 import Legend from './UI/Legend'
 import Overlay from './UI/Overlay'
+// import PostProcessing from './Effects/PostProcessing'
 
 export default function Scene() {
     const [activePoint, setActivePoint] = useState(null)
@@ -23,6 +24,7 @@ export default function Scene() {
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} />
                 <OrbitControls
+                    makeDefault
                     enableZoom={false}
                     enablePan={false}
                     autoRotate={!activePoint}
@@ -30,6 +32,7 @@ export default function Scene() {
                 />
                 <Starfield />
                 <ParticleSphere onPointClick={handlePointClick} />
+                {/* <PostProcessing /> */}
             </Canvas>
 
             <Legend />

@@ -231,7 +231,7 @@ export default function ParticleSphere({ onPointClick }) {
                 </bufferGeometry>
                 {/* Sharp Square Pixels */}
                 <pointsMaterial
-                    size={0.065}
+                    size={0.045}
                     vertexColors={true}
                     sizeAttenuation={true}
                     transparent={true}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Canvas } from '@react-three/fiber'
 import Starfield from './Environment/Stars'
-import MainSphere from './Sphere/MainSphere'
+import ParticleSphere from './Sphere/ParticleSphere'
 
 export default function Scene() {
     return (
@@ -10,7 +10,7 @@ export default function Scene() {
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} />
                 <Starfield />
-                <MainSphere />
+                <ParticleSphere />
             </Canvas>
         </div>
     )

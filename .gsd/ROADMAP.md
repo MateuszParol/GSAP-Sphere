@@ -18,7 +18,7 @@
 **Requirements**: SPEC Vision, Initial Repository Setup.
 
 ### Phase 2: The Particle Sphere
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Implement the interactive particle sphere. The particles should react to cursor proximity (magnetism/repulsion effect) and the sphere should be rotatable (drag/touch).
 **Requirements**: SPEC Goal 1 (Immersive 3D Visuals).
 

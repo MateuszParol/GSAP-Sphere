@@ -10,74 +10,107 @@ export default function ParticleSphere({ onPointClick }) {
     const { viewport } = useThree()
 
     // Config
-    const count = 64
     const radius = 1.8
     const threshold = 2.5
-    const clusterBaseRadius = 0.5
 
     // Touch Handling State
     const touchStart = useRef({ x: 0, y: 0, time: 0 })
 
     // Generate Geometry & Colors
     const { positions, originalPositions, colors, particleClusterMap } = useMemo(() => {
-        const geometry = new THREE.SphereGeometry(radius, count, count)
-        const posArray = geometry.attributes.position.array
-        const countPoints = posArray.length / 3
+        // 1. BASE SPHERE (Low Resolution / Sparse)
+        // Reduced from 64/92 to 48 for a cleaner, sparser background
+        const baseGeometry = new THREE.SphereGeometry(radius, 64, 64)
+        const basePosArray = baseGeometry.attributes.position.array
+        const baseCount = basePosArray.length / 3
 
-        const originalPositions = new Float32Array(posArray)
-        const colors = new Float32Array(countPoints * 3)
-        const particleClusterMap = new Int16Array(countPoints).fill(-1)
+        // 2. CLUSTER INJECTION (High Density)
+        // Add extra particles specifically around the interactive points
+        const particlesPerCluster = 120
+        const totalExtras = points.length * particlesPerCluster
+
+        const totalCount = baseCount + totalExtras
+
+        const combinedPositions = new Float32Array(totalCount * 3)
+        const combinedOriginal = new Float32Array(totalCount * 3)
+        const combinedColors = new Float32Array(totalCount * 3)
+        // -1 means background, >=0 means cluster ID
+        const combinedMap = new Int16Array(totalCount).fill(-1)
 
         const baseColor = new THREE.Color('#a5f3fc')
 
-        for (let i = 0; i < countPoints; i++) {
-            // ORGANIC LOOK RE-INTRODUCED
-            // Jitter for noise/organic feel, but kept sharp by PointsMaterial
-            const jitter = 0.06
-            posArray[i * 3] += (Math.random() - 0.5) * jitter
-            posArray[i * 3 + 1] += (Math.random() - 0.5) * jitter
-            posArray[i * 3 + 2] += (Math.random() - 0.5) * jitter
+        // --- A. Process Base Sphere ---
+        for (let i = 0; i < baseCount; i++) {
+            // Apply organic jitter to base
+            const jitter = 0.05
+            const x = basePosArray[i * 3] + (Math.random() - 0.5) * jitter
+            const y = basePosArray[i * 3 + 1] + (Math.random() - 0.5) * jitter
+            const z = basePosArray[i * 3 + 2] + (Math.random() - 0.5) * jitter
 
-            originalPositions[i * 3] = posArray[i * 3]
-            originalPositions[i * 3 + 1] = posArray[i * 3 + 1]
-            originalPositions[i * 3 + 2] = posArray[i * 3 + 2]
+            combinedPositions[i * 3] = x
+            combinedPositions[i * 3 + 1] = y
+            combinedPositions[i * 3 + 2] = z
 
-            colors[i * 3] = baseColor.r * 0.5
-            colors[i * 3 + 1] = baseColor.g * 0.5
-            colors[i * 3 + 2] = baseColor.b * 0.5
+            combinedOriginal[i * 3] = x
+            combinedOriginal[i * 3 + 1] = y
+            combinedOriginal[i * 3 + 2] = z
+
+            combinedColors[i * 3] = baseColor.r * 0.4 // Dismiss background slightly
+            combinedColors[i * 3 + 1] = baseColor.g * 0.4
+            combinedColors[i * 3 + 2] = baseColor.b * 0.4
+
+            // Base particles generally don't belong to clusters unless by pure chance,
+            // but we leave them as background (-1) to ensure the Clusters are the "added" ones.
         }
+
+        // --- B. Process Clusters ---
+        let offset = baseCount
 
         points.forEach((point, pIndex) => {
             const pointColor = new THREE.Color(point.color)
-            const intensity = 2.5 // High contrast
+            const targetPos = point.position // Vector3
 
-            for (let i = 0; i < countPoints; i++) {
-                if (particleClusterMap[i] !== -1) continue
+            for (let j = 0; j < particlesPerCluster; j++) {
+                const i = offset + j
 
-                const px = posArray[i * 3]
-                const py = posArray[i * 3 + 1]
-                const pz = posArray[i * 3 + 2]
+                // Generate point ON SPHERE SURFACE near target
+                // 1. Start with target vector
+                const v = targetPos.clone()
+                // 2. Add random spread (cluster radius)
+                const spread = 0.35 // Tighter spread for dense buttons
+                v.x += (Math.random() - 0.5) * spread
+                v.y += (Math.random() - 0.5) * spread
+                v.z += (Math.random() - 0.5) * spread
 
-                const dist = Math.sqrt(
-                    Math.pow(px - point.position.x, 2) +
-                    Math.pow(py - point.position.y, 2) +
-                    Math.pow(pz - point.position.z, 2)
-                )
+                // 3. Project back to sphere radius + jitter
+                v.normalize().multiplyScalar(radius + (Math.random() - 0.5) * 0.05)
 
-                if (dist < clusterBaseRadius) {
-                    // Re-introduce slight probability noise at edges for organic cluster shape
-                    const probability = 1.0 - (dist / clusterBaseRadius) * 0.5
-                    if (Math.random() < probability) {
-                        particleClusterMap[i] = pIndex
-                        colors[i * 3] = pointColor.r * intensity
-                        colors[i * 3 + 1] = pointColor.g * intensity
-                        colors[i * 3 + 2] = pointColor.b * intensity
-                    }
-                }
+                combinedPositions[i * 3] = v.x
+                combinedPositions[i * 3 + 1] = v.y
+                combinedPositions[i * 3 + 2] = v.z
+
+                combinedOriginal[i * 3] = v.x
+                combinedOriginal[i * 3 + 1] = v.y
+                combinedOriginal[i * 3 + 2] = v.z
+
+                // Active Colors
+                const intensity = 2.0
+                combinedColors[i * 3] = pointColor.r * intensity
+                combinedColors[i * 3 + 1] = pointColor.g * intensity
+                combinedColors[i * 3 + 2] = pointColor.b * intensity
+
+                // Mark membership
+                combinedMap[i] = pIndex
             }
+            offset += particlesPerCluster
         })
 
-        return { positions: posArray, originalPositions, colors, particleClusterMap }
+        return {
+            positions: combinedPositions,
+            originalPositions: combinedOriginal,
+            colors: combinedColors,
+            particleClusterMap: combinedMap
+        }
     }, [])
 
     const tempVec = new THREE.Vector3()
@@ -114,6 +147,7 @@ export default function ParticleSphere({ onPointClick }) {
             let targetY = oy
             let targetZ = oz
 
+            // Mouse Repulsion
             if (hoverPoint.current) {
                 const dist = tempVec.distanceTo(hoverPoint.current)
                 if (dist < threshold) {
@@ -142,6 +176,7 @@ export default function ParticleSphere({ onPointClick }) {
                 }
             }
 
+            // Cluster Animation
             const clusterIndex = particleClusterMap[pIdx]
             if (clusterIndex !== -1) {
                 const point = points[clusterIndex]
@@ -181,7 +216,7 @@ export default function ParticleSphere({ onPointClick }) {
         document.body.style.cursor = 'auto'
     }
 
-    // --- CUSTOM TAP LOGIC UPDATED ---
+    // --- CUSTOM TAP LOGIC ---
     const handlePointerDown = (e) => {
         touchStart.current = {
             x: e.clientX,
@@ -195,15 +230,18 @@ export default function ParticleSphere({ onPointClick }) {
         const deltaY = Math.abs(e.clientY - touchStart.current.y)
         const deltaTime = Date.now() - touchStart.current.time
 
-        // Criteria for a TAP (Mobile Friendly):
-        // 1. Movement < 40 pixels (Increased from 10px for High DPI screens)
-        // 2. Duration < 500ms (Slightly longer press allowed)
-        const isTap = deltaX < 40 && deltaY < 40 && deltaTime < 500
+        // Criteria for a TAP (Mobile Friendly - Relaxed):
+        // 1. Movement < 75 pixels (High DPI screens + shaky fingers)
+        // 2. Duration < 600ms 
+        const isTap = deltaX < 75 && deltaY < 75 && deltaTime < 600
 
-        if (isTap && hoverPoint.current) {
+        if (isTap && pointsRef.current) {
+            // FIX: Use e.point directly instead of relying on hoverPoint (which requires Move)
+            // This ensures "static taps" (without drag) work instantly
+            const localPoint = pointsRef.current.worldToLocal(e.point.clone())
+
             for (const p of points) {
-                const dist = hoverPoint.current.distanceTo(p.position)
-                // Generous click tolerance
+                const dist = localPoint.distanceTo(p.position)
                 if (dist < 1.0) {
                     onPointClick(p)
                     return
@@ -229,7 +267,6 @@ export default function ParticleSphere({ onPointClick }) {
                         itemSize={3}
                     />
                 </bufferGeometry>
-                {/* Sharp Square Pixels */}
                 <pointsMaterial
                     size={0.045}
                     vertexColors={true}

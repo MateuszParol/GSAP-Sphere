@@ -4,8 +4,8 @@ import { OrbitControls } from '@react-three/drei'
 import Starfield from './Environment/Stars'
 import ParticleSphere from './Sphere/ParticleSphere'
 import Legend from './UI/Legend'
-import Overlay from './UI/Overlay'
-// import PostProcessing from './Effects/PostProcessing'
+import Overlay from './UI/Overlay.jsx'
+import ContactModal from './UI/ContactModal.jsx'
 
 export default function Scene() {
     const [activePoint, setActivePoint] = useState(null)
@@ -17,6 +17,9 @@ export default function Scene() {
     const handleClose = () => {
         setActivePoint(null)
     }
+
+    const isContactOpen = activePoint?.id === 'contact'
+    const isInfoOpen = activePoint && activePoint.id !== 'contact'
 
     return (
         <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
@@ -36,7 +39,8 @@ export default function Scene() {
             </Canvas>
 
             <Legend />
-            <Overlay activePoint={activePoint} onClose={handleClose} />
+            {isInfoOpen && <Overlay activePoint={activePoint} onClose={handleClose} />}
+            <ContactModal isOpen={isContactOpen} onClose={handleClose} />
         </div>
     )
 }

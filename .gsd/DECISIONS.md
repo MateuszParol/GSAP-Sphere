@@ -44,3 +44,12 @@
 1.  **Integrated Particles:** Use `vertexColors` in `ParticleSphere`. Specific particles will be colored differently to form "4-point squares" representing the hotspots.
 2.  **Legend UI:** Remove on-sphere text. Display a "Cyber Legend" UI (Right side on Desktop, Bottom on Mobile) that explains the colors.
 3.  **Interaction:** Hovering a "special" particle cluster makes it glow/scale up. Clicking triggers the existing Overlay logic.
+
+## [ADR-007] Mobile Tap Tolerance & Organic Aesthetic
+**Status:** Accepted
+**Context:** Single finger tap on mobile (iPhone) often fails because it registers as a micro-drag. User also wants "Organic/Noisy" positioning back, combined with "Sharp Pixel" geometry.
+**Decision:**
+1.  **Visuals:** Re-introduce `random()` jitter to particle positions (`useMemo`). Keep `PointMaterial` (squares) and `vertexColors`.
+2.  **Interaction:** Increase "Tap Tolerance" in `ParticleSphere` interaction logic.
+    -   Increase max movement threshold from `10px` to `40px` (High DPI screens make 10px tiny).
+    -   Use `pointerDown`/`pointerUp` to manually detect taps, ignoring small drags that occur naturally during touch.

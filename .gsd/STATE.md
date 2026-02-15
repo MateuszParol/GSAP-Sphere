@@ -1,11 +1,11 @@
 ## Current Position
-- **Phase**: 3 (Sharp & Mobile Fixed)
+- **Phase**: 3 (Organic & Mobile Tuned)
 - **Status**: Verified
 
 ## Last Session Summary
-Phase 3 Refinements II executed.
-- **Visuals**: Reverted to **Sharp Square Pixels** by removing the glow texture. Kept high contrast colors.
-- **Mobile Interaction**: Implemented custom **Tap Detection** logic (time < 400ms, movement < 10px) to solve the conflict between `OrbitControls` drag and click events. Tapping clusters should now reliably trigger the overlay.
+Phase 3 Refinements III executed.
+- **Visuals**: Re-introduced **Organic Jitter** (randomness) to particle positions while keeping **Sharp Pixels**. Best of both worlds (Digital Chaos).
+- **Mobile Interaction**: Increased **Tap Tolerance** to **40px** and **500ms**. This prevents the "two-finger" requirement by correctly interpreting small single-finger movements as taps, not drags.
 
 ## Next Steps
 1. /plan 4 (Contact Form & Final Polish)

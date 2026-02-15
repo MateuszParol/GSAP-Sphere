@@ -16,7 +16,6 @@ export default function ParticleSphere({ onPointClick }) {
     const clusterBaseRadius = 0.5
 
     // Touch Handling State
-    // We use refs to track touch start position/time to distinguish Tap vs Drag
     const touchStart = useRef({ x: 0, y: 0, time: 0 })
 
     // Generate Geometry & Colors
@@ -32,8 +31,12 @@ export default function ParticleSphere({ onPointClick }) {
         const baseColor = new THREE.Color('#a5f3fc')
 
         for (let i = 0; i < countPoints; i++) {
-            // NO RANDOM JITTER - Sharp geometric look
-            // posArray[i * 3] += (Math.random() - 0.5) * 0.05
+            // ORGANIC LOOK RE-INTRODUCED
+            // Jitter for noise/organic feel, but kept sharp by PointsMaterial
+            const jitter = 0.06
+            posArray[i * 3] += (Math.random() - 0.5) * jitter
+            posArray[i * 3 + 1] += (Math.random() - 0.5) * jitter
+            posArray[i * 3 + 2] += (Math.random() - 0.5) * jitter
 
             originalPositions[i * 3] = posArray[i * 3]
             originalPositions[i * 3 + 1] = posArray[i * 3 + 1]
@@ -46,7 +49,7 @@ export default function ParticleSphere({ onPointClick }) {
 
         points.forEach((point, pIndex) => {
             const pointColor = new THREE.Color(point.color)
-            const intensity = 2.0 // Boost for brightness without texture
+            const intensity = 2.5 // High contrast
 
             for (let i = 0; i < countPoints; i++) {
                 if (particleClusterMap[i] !== -1) continue
@@ -62,13 +65,14 @@ export default function ParticleSphere({ onPointClick }) {
                 )
 
                 if (dist < clusterBaseRadius) {
-                    // Constant probability inside radius = Sharp shapes
-                    // if (Math.random() < 0.8) { 
-                    particleClusterMap[i] = pIndex
-                    colors[i * 3] = pointColor.r * intensity
-                    colors[i * 3 + 1] = pointColor.g * intensity
-                    colors[i * 3 + 2] = pointColor.b * intensity
-                    // }
+                    // Re-introduce slight probability noise at edges for organic cluster shape
+                    const probability = 1.0 - (dist / clusterBaseRadius) * 0.5
+                    if (Math.random() < probability) {
+                        particleClusterMap[i] = pIndex
+                        colors[i * 3] = pointColor.r * intensity
+                        colors[i * 3 + 1] = pointColor.g * intensity
+                        colors[i * 3 + 2] = pointColor.b * intensity
+                    }
                 }
             }
         })
@@ -143,8 +147,9 @@ export default function ParticleSphere({ onPointClick }) {
                 const point = points[clusterIndex]
                 const isActive = (activeClusterId === point.id)
 
-                const breath = 1.05 + Math.sin(time * 1.5 + pIdx * 99.0) * 0.05
-                const pop = isActive ? (0.1 + Math.sin(time * 10) * 0.05) : 0
+                // Organic noise animation
+                const breath = 1.05 + Math.sin(time * 2.0 + pIdx * 99.0) * 0.08
+                const pop = isActive ? (0.1 + Math.sin(time * 12) * 0.05) : 0
 
                 const scale = breath + pop
                 targetX *= scale
@@ -176,9 +181,8 @@ export default function ParticleSphere({ onPointClick }) {
         document.body.style.cursor = 'auto'
     }
 
-    // --- CUSTOM TAP LOGIC ---
+    // --- CUSTOM TAP LOGIC UPDATED ---
     const handlePointerDown = (e) => {
-        // e.stopPropagation() // Optional: experiment with this
         touchStart.current = {
             x: e.clientX,
             y: e.clientY,
@@ -187,16 +191,14 @@ export default function ParticleSphere({ onPointClick }) {
     }
 
     const handlePointerUp = (e) => {
-        // e.stopPropagation()
-
         const deltaX = Math.abs(e.clientX - touchStart.current.x)
         const deltaY = Math.abs(e.clientY - touchStart.current.y)
         const deltaTime = Date.now() - touchStart.current.time
 
-        // Criteria for a TAP:
-        // 1. Movement < 10 pixels (allows for slight finger jitter)
-        // 2. Duration < 300ms (avoids long presses being clicks)
-        const isTap = deltaX < 10 && deltaY < 10 && deltaTime < 400
+        // Criteria for a TAP (Mobile Friendly):
+        // 1. Movement < 40 pixels (Increased from 10px for High DPI screens)
+        // 2. Duration < 500ms (Slightly longer press allowed)
+        const isTap = deltaX < 40 && deltaY < 40 && deltaTime < 500
 
         if (isTap && hoverPoint.current) {
             for (const p of points) {
@@ -227,9 +229,9 @@ export default function ParticleSphere({ onPointClick }) {
                         itemSize={3}
                     />
                 </bufferGeometry>
-                {/* Default PointsMaterial renders squares/pixels */}
+                {/* Sharp Square Pixels */}
                 <pointsMaterial
-                    size={0.065} // Balanced size for pixels
+                    size={0.065}
                     vertexColors={true}
                     sizeAttenuation={true}
                     transparent={true}
@@ -240,6 +242,7 @@ export default function ParticleSphere({ onPointClick }) {
                 />
             </points>
 
+            {/* Hitbox Mesh */}
             <mesh
                 ref={meshRef}
                 visible={true}

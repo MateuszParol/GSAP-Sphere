@@ -60,7 +60,7 @@ export default function ContactModal({ isOpen, onClose }) {
         const formData = {
             name: e.target.name.value,
             email: e.target.email.value,
-            subject: e.target.subject.value,
+            title: e.target.subject.value,
             message: e.target.message.value
         }
 
@@ -72,7 +72,8 @@ export default function ContactModal({ isOpen, onClose }) {
                 setStatus('IDLE')
             }, 2000)
         } catch (error) {
-            console.error("Email failed:", error)
+            console.error("FAILED...", error)
+            if (error.text) console.error("EmailJS Error Text:", error.text)
             setStatus('ERROR')
         }
     }

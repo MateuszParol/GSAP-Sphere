@@ -1,11 +1,14 @@
 ## Current Position
-- **Phase**: 4 (Bug Fixes)
+- **Phase**: 4 (Bug Fixes - Email Template)
 - **Status**: Live / Verified
 
 ## Last Session Summary
-Phase 4 Bug Fix executed.
-- **Crash Fix**: Restored missing `Overlay` import in `Scene.jsx`. This resolves the "black screen" when clicking Info points (Projects, About, etc.).
-- **Style**: Info Modals now share the "Sci-Fi" styling of the Contact Modal.
+Phase 4 Template Fix executed.
+- **Variable Alignment**: Changed data keys in `ContactModal.jsx` to matches User's EmailJS Template:
+    - `from_name` -> `name`
+    - `subject` -> `title`
+    - `reply_to` -> `email`
+- **Logging**: Added advanced error logging for easier debugging.
 
 ## Next Steps
 1. Final User Approval.

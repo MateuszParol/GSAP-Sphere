@@ -3,9 +3,9 @@ import emailjs from '@emailjs/browser'
 // INITIALIZE WITH PLACEHOLDERS
 // User instructions: Replace these constants with keys from your EmailJS dashboard
 // https://dashboard.emailjs.com/admin
-const SERVICE_ID = 'YOUR_SERVICE_ID'
-const TEMPLATE_ID = 'YOUR_TEMPLATE_ID'
-const PUBLIC_KEY = 'YOUR_PUBLIC_KEY'
+const SERVICE_ID = 'service_81ecy0l'
+const TEMPLATE_ID = 'template_pv7cjhd'
+const PUBLIC_KEY = '6uvsr6OQfioAXVUeW'
 
 export const sendContactForm = (data) => {
     // If keys are missing, simulate success for dev/demo purposes

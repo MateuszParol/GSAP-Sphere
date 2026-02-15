@@ -1,12 +1,10 @@
-import { useState } from 'react'
+import React from 'react'
+import Scene from './components/Scene'
 import './App.css'
 
 function App() {
-
     return (
-        <>
-            <h1>CosmoTibia Sphere</h1>
-        </>
+        <Scene />
     )
 }
 

@@ -13,7 +13,7 @@
 ## Phases
 
 ### Phase 1: Foundation & Atmosphere
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Set up React project, install 3D libraries (Three, Fiber, Drei, GSAP), and implement the core visual environment (starry background + base sphere).
 **Requirements**: SPEC Vision, Initial Repository Setup.
 

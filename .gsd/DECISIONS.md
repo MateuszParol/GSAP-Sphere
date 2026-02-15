@@ -21,10 +21,18 @@
     -   Potentially increase `threshold` slightly.
 
 ## [ADR-004] Robust Particle Interaction (Raycasting)
-**Status:** Proposed
+**Status:** Accepted
 **Context:** Manual 2D->3D projection is failing for touch and rotated spheres. Particles snap back instead of smoothing.
 **Decision:**
 1.  Use `Raycaster` (via `useThree`) to find the exact intersection point on a hidden "Hit Sphere".
 2.  Use the intersection point as the magnetic center.
 3.  If no intersection (cursor off sphere), set magnetic center to null.
 4.  Implement `lerp` for returning to origin (smooth restoration) instead of hard `set()`.
+
+## [ADR-005] Clamped Displacement Physics
+**Status:** Accepted
+**Context:** Particles "clump" too aggressively around the cursor, destroying the sphere shape and creating unsightly blobs.
+**Decision:**
+1.  Implement a **Maximum Displacement Clamp**. A particle cannot move further than `MAX_DIST` (e.g., 0.2 units) from its original position, regardless of attraction force.
+2.  Reduce interaction radius (`threshold`) to affect fewer neighbors.
+3.  The result should be a subtle "bulge" or "shift" rather than a collapse.

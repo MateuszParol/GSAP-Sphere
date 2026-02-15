@@ -1,19 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import Starfield from './Environment/Stars'
 import ParticleSphere from './Sphere/ParticleSphere'
+import PointsGroup from './Navigation/PointsGroup'
+import Overlay from './UI/Overlay'
 
 export default function Scene() {
+    const [activePoint, setActivePoint] = useState(null)
+
+    const handlePointClick = (point) => {
+        setActivePoint(point)
+    }
+
+    const handleClose = () => {
+        setActivePoint(null)
+    }
+
     return (
         <div style={{ width: '100vw', height: '100vh' }}>
             <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} />
-                <OrbitControls enableZoom={false} enablePan={false} autoRotate={true} autoRotateSpeed={0.5} />
+                <OrbitControls
+                    enableZoom={false}
+                    enablePan={false}
+                    autoRotate={!activePoint}
+                    autoRotateSpeed={0.5}
+                />
                 <Starfield />
                 <ParticleSphere />
+                <PointsGroup onPointClick={handlePointClick} />
             </Canvas>
+
+            <Overlay activePoint={activePoint} onClose={handleClose} />
         </div>
     )
 }

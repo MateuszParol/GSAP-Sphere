@@ -46,30 +46,38 @@ export default function ParticleSphere() {
             let targetZ = oz
 
             // 3. Apply Interaction (if hovering)
+            // 3. Apply Interaction (if hovering)
             if (hoverPoint.current) {
                 const dist = tempVec.distanceTo(hoverPoint.current)
 
                 if (dist < threshold) {
                     const force = (threshold - dist) / threshold
-                    // Move TOWARDS the hover point
-                    // tempVec.lerp(hoverPoint.current, force * strength * delta)
-                    // Actually, let's create a "target" that is pulled towards hover point
-                    // But we want them to "bulge" or attract.
 
-                    // Simple logic: Target position is shifted towards hover point
-                    // We modify the *target* for this frame based on attraction
-                    const attraction = force * strength // e.g. 0 to 1 * strength
-
-                    // Calculate vector from Origin to Hover
+                    // Vector from Origin to Hover Point (Direction of attraction)
                     const dx = hoverPoint.current.x - ox
                     const dy = hoverPoint.current.y - oy
                     const dz = hoverPoint.current.z - oz
 
-                    // Attract target towards hover point
-                    // But clamp it so it doesn't collapse
-                    targetX += dx * force * 1.5
-                    targetY += dy * force * 1.5
-                    targetZ += dz * force * 1.5
+                    // Calculate proposed displacement
+                    // Using a lower strength multiplier for subtle effect
+                    const moveX = dx * force * 0.5
+                    const moveY = dy * force * 0.5
+                    const moveZ = dz * force * 0.5
+
+                    // CLAMPING: Limit the maximum distance a particle can travel from its origin
+                    const maxDisplacement = 0.3 // Maximum units a particle can shift
+                    const currentDisp = Math.sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ)
+
+                    if (currentDisp > maxDisplacement) {
+                        const scale = maxDisplacement / currentDisp
+                        targetX += moveX * scale
+                        targetY += moveY * scale
+                        targetZ += moveZ * scale
+                    } else {
+                        targetX += moveX
+                        targetY += moveY
+                        targetZ += moveZ
+                    }
                 }
             }
 

@@ -36,3 +36,11 @@
 1.  Implement a **Maximum Displacement Clamp**. A particle cannot move further than `MAX_DIST` (e.g., 0.2 units) from its original position, regardless of attraction force.
 2.  Reduce interaction radius (`threshold`) to affect fewer neighbors.
 3.  The result should be a subtle "bulge" or "shift" rather than a collapse.
+
+## [ADR-006] Phase 3 Redesign: Integrated Points & Legend
+**Status:** Accepted
+**Context:** User rejected floating HTML markers ("not aesthetic"). Wants points to be part of the particle sphere itself.
+**Decision:**
+1.  **Integrated Particles:** Use `vertexColors` in `ParticleSphere`. Specific particles will be colored differently to form "4-point squares" representing the hotspots.
+2.  **Legend UI:** Remove on-sphere text. Display a "Cyber Legend" UI (Right side on Desktop, Bottom on Mobile) that explains the colors.
+3.  **Interaction:** Hovering a "special" particle cluster makes it glow/scale up. Clicking triggers the existing Overlay logic.

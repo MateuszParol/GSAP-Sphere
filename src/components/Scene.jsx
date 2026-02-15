@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import Starfield from './Environment/Stars'
 import ParticleSphere from './Sphere/ParticleSphere'
-import PointsGroup from './Navigation/PointsGroup'
+import Legend from './UI/Legend'
 import Overlay from './UI/Overlay'
 
 export default function Scene() {
@@ -18,7 +18,7 @@ export default function Scene() {
     }
 
     return (
-        <div style={{ width: '100vw', height: '100vh' }}>
+        <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
             <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} />
@@ -29,10 +29,10 @@ export default function Scene() {
                     autoRotateSpeed={0.5}
                 />
                 <Starfield />
-                <ParticleSphere />
-                <PointsGroup onPointClick={handlePointClick} />
+                <ParticleSphere onPointClick={handlePointClick} />
             </Canvas>
 
+            <Legend />
             <Overlay activePoint={activePoint} onClose={handleClose} />
         </div>
     )

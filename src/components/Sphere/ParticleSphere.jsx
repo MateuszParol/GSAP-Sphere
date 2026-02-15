@@ -22,9 +22,6 @@ export default function ParticleSphere() {
     useFrame((state, delta) => {
         if (!pointsRef.current) return
 
-        // Continuous slow rotation
-        pointsRef.current.rotation.y += delta * 0.05
-
         // Pointer interaction
         // Project pointer to 3D space (approximate depth at sphere)
         mouseVec.set(state.pointer.x * viewport.width / 2, state.pointer.y * viewport.height / 2, 0)
@@ -36,25 +33,16 @@ export default function ParticleSphere() {
             tempVec.set(originalPositions[i], originalPositions[i + 1], originalPositions[i + 2])
 
             // Apply rotation to match current mesh rotation to get world position relative to mouse
-            // (Simplified: actually simpler to rotate mouse into local space or just check rough distance)
-            // For "magnetism", we'll check distance in local space but need to account for rotation if we want precision.
-            // Optimization: Just check distance to "unrotated" mouse projected on sphere surface for effect.
-            // Better: Unproject mouse to world, transform to local space.
-
-            // To keep it simple and performant:
-            // We will perform the check in local space. 
-            // We need to inverse rotate the mouse position to match local space coordinates.
-
             mouseVec.set(state.pointer.x * viewport.width / 2, state.pointer.y * viewport.height / 2, 2) // Assume mouse is "in front"
             mouseVec.applyMatrix4(pointsRef.current.matrixWorld.clone().invert())
 
             const dist = tempVec.distanceTo(mouseVec)
-            const threshold = 1.5 // Interaction radius
+            const threshold = 2.5 // INCREASED INTERACTION RADIUS (was 1.5)
 
             if (dist < threshold) {
                 // Pull towards mouse
                 const force = (threshold - dist) / threshold
-                tempVec.lerp(mouseVec, force * 0.2)
+                tempVec.lerp(mouseVec, force * 0.8) // INCREASED FORCE (was 0.2)
             } else {
                 // Return to original
                 tempVec.set(originalPositions[i], originalPositions[i + 1], originalPositions[i + 2])

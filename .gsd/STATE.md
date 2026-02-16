@@ -1,14 +1,16 @@
-## Current Position
-- **Phase**: 4 (Bug Fixes - Email Template)
-- **Status**: Live / Verified
+# State
 
-## Last Session Summary
-Phase 4 Template Fix executed.
-- **Variable Alignment**: Changed data keys in `ContactModal.jsx` to matches User's EmailJS Template:
-    - `from_name` -> `name`
-    - `subject` -> `title`
-    - `reply_to` -> `email`
-- **Logging**: Added advanced error logging for easier debugging.
+## Current Phase
+**Phase 2: CMS Integration (Sanity.io)** -> **Completed (Frontend + Studio)**
+
+## Status
+**Completed**.
+-   Installed `@sanity/client` and configured frontend.
+-   **Manually scaffolded Sanity Studio** in `./studio`.
+-   Configured Studio for Project ID `90u1xxaj`.
+-   Installed Studio dependencies.
 
 ## Next Steps
-1. Final User Approval.
+-   **Run Studio**: `cd studio` -> `npm run dev`.
+-   **Add Content**: Add projects via Studio UI.
+-   **Phase 3: SEO & Performance**.

@@ -3,7 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { points } from '../../data/points'
 
-export default function ParticleSphere({ onPointClick }) {
+export default function ParticleSphere({ onPointClick, isWarping }) {
     const pointsRef = useRef()
     const meshRef = useRef()
     const hoverPoint = useRef(null)
@@ -119,10 +119,11 @@ export default function ParticleSphere({ onPointClick }) {
         if (!pointsRef.current) return
 
         const positionsArray = pointsRef.current.geometry.attributes.position.array
+        const colorsArray = pointsRef.current.geometry.attributes.color.array // Access colors for warp brightening
         const time = state.clock.elapsedTime
 
         let activeClusterId = null
-        if (hoverPoint.current) {
+        if (hoverPoint.current && !isWarping) { // Disable hover during warp
             for (const p of points) {
                 const dist = hoverPoint.current.distanceTo(p.position)
                 if (dist < 0.7) {
@@ -147,54 +148,78 @@ export default function ParticleSphere({ onPointClick }) {
             let targetY = oy
             let targetZ = oz
 
-            // Mouse Repulsion
-            if (hoverPoint.current) {
-                const dist = tempVec.distanceTo(hoverPoint.current)
-                if (dist < threshold) {
-                    const force = (threshold - dist) / threshold
-                    const dx = hoverPoint.current.x - ox
-                    const dy = hoverPoint.current.y - oy
-                    const dz = hoverPoint.current.z - oz
+            // --- WARP LOGIC ---
+            if (isWarping) {
+                // Streak towards camera (Z-axis)
+                // Random speed factor for "streaky" look
+                const speed = 20.0 + Math.random() * 30.0
+                targetZ += speed * delta * 5.0
 
-                    const moveX = dx * force * 0.5
-                    const moveY = dy * force * 0.5
-                    const moveZ = dz * force * 0.5
+                // Slight centering to create "tunnel" effect
+                targetX *= 1.0 - (delta * 0.5)
+                targetY *= 1.0 - (delta * 0.5)
 
-                    const maxDisplacement = 0.3
-                    const currentDisp = Math.sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ)
+                // Loop particles for continuous flow if needed, or just let them fly out
+                // For a 1.5s transition, simple fly-out is often enough. 
+                // Let's add some jitter for "energy"
+                targetX += (Math.random() - 0.5) * 0.2
+                targetY += (Math.random() - 0.5) * 0.2
+            } else {
+                // Normal Physics Logic only if NOT warping
 
-                    if (currentDisp > maxDisplacement) {
-                        const scale = maxDisplacement / currentDisp
-                        targetX += moveX * scale
-                        targetY += moveY * scale
-                        targetZ += moveZ * scale
-                    } else {
-                        targetX += moveX
-                        targetY += moveY
-                        targetZ += moveZ
+                // Mouse Repulsion
+                if (hoverPoint.current) {
+                    const dist = tempVec.distanceTo(hoverPoint.current)
+                    if (dist < threshold) {
+                        const force = (threshold - dist) / threshold
+                        const dx = hoverPoint.current.x - ox
+                        const dy = hoverPoint.current.y - oy
+                        const dz = hoverPoint.current.z - oz
+
+                        const moveX = dx * force * 0.5
+                        const moveY = dy * force * 0.5
+                        const moveZ = dz * force * 0.5
+
+                        const maxDisplacement = 0.3
+                        const currentDisp = Math.sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ)
+
+                        if (currentDisp > maxDisplacement) {
+                            const scale = maxDisplacement / currentDisp
+                            targetX += moveX * scale
+                            targetY += moveY * scale
+                            targetZ += moveZ * scale
+                        } else {
+                            targetX += moveX
+                            targetY += moveY
+                            targetZ += moveZ
+                        }
                     }
+                }
+
+                // Cluster Animation
+                const clusterIndex = particleClusterMap[pIdx]
+                if (clusterIndex !== -1) {
+                    const point = points[clusterIndex]
+                    const isActive = (activeClusterId === point.id)
+
+                    // Organic noise animation
+                    const breath = 1.05 + Math.sin(time * 2.0 + pIdx * 99.0) * 0.08
+                    const pop = isActive ? (0.1 + Math.sin(time * 12) * 0.05) : 0
+
+                    const scale = breath + pop
+                    targetX *= scale
+                    targetY *= scale
+                    targetZ *= scale
                 }
             }
 
-            // Cluster Animation
-            const clusterIndex = particleClusterMap[pIdx]
-            if (clusterIndex !== -1) {
-                const point = points[clusterIndex]
-                const isActive = (activeClusterId === point.id)
+            // Smooth Interpolation
+            // Faster interpolation during warp for responsiveness
+            const lerpFactor = isWarping ? 0.2 : 3.0 * delta
 
-                // Organic noise animation
-                const breath = 1.05 + Math.sin(time * 2.0 + pIdx * 99.0) * 0.08
-                const pop = isActive ? (0.1 + Math.sin(time * 12) * 0.05) : 0
-
-                const scale = breath + pop
-                targetX *= scale
-                targetY *= scale
-                targetZ *= scale
-            }
-
-            tempVec.x += (targetX - tempVec.x) * 3.0 * delta
-            tempVec.y += (targetY - tempVec.y) * 3.0 * delta
-            tempVec.z += (targetZ - tempVec.z) * 3.0 * delta
+            tempVec.x += (targetX - tempVec.x) * lerpFactor
+            tempVec.y += (targetY - tempVec.y) * lerpFactor
+            tempVec.z += (targetZ - tempVec.z) * lerpFactor
 
             positionsArray[i] = tempVec.x
             positionsArray[i + 1] = tempVec.y

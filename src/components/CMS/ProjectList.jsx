@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { client, urlFor } from '../../sanityClient';
-import gsap from 'gsap';
+import styles from './ProjectList.module.css';
+import sharedStyles from '../../styles/SharedStyles.module.css';
 
 const ProjectList = () => {
     const [projects, setProjects] = useState([]);
@@ -35,80 +36,39 @@ const ProjectList = () => {
             });
     }, []);
 
-    if (isLoading) return <div style={{ color: '#00ffff', fontFamily: 'monospace', textAlign: 'center' }}>LOADING...</div>;
-    if (error) return <div style={{ color: '#ff0000', fontFamily: 'monospace', textAlign: 'center' }}>{error}</div>;
+    if (isLoading) return <div style={{ color: '#00ffff', fontFamily: 'monospace', textAlign: 'center', marginTop: '50px' }}>ŁADOWANIE DANYCH MISJI...</div>;
+    if (error) return <div style={{ color: '#ff0000', fontFamily: 'monospace', textAlign: 'center', marginTop: '50px' }}>{error}</div>;
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'row', // Default: Side-by-side
-            height: 'calc(100vh - 200px)', // Adjust based on navbar/padding
-            gap: '20px',
-            maxWidth: '1400px',
-            margin: '0 auto',
-            padding: '0 20px',
-            boxSizing: 'border-box'
-        }}>
+        <div className={styles.container}>
             {/* SIDEBAR (Project List) */}
-            <div style={{
-                width: '300px',
-                minWidth: '250px',
-                borderRight: '1px solid rgba(0, 255, 255, 0.2)',
-                paddingRight: '20px',
-                overflowY: 'auto',
-                scrollbarWidth: 'none',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px'
-            }}>
-                <h3 style={{ color: '#00ffff', borderBottom: '1px solid #00ffff', paddingBottom: '10px', marginBottom: '10px' }}>
-                    DATA LOGS
+            <div className={styles.sidebar}>
+                <h3 className={`${styles.sidebarHeader} ${sharedStyles.neonText}`}>
+                    LOGI_DANYCH // PROJEKTY
                 </h3>
                 {projects.map((project) => (
                     <div
                         key={project.slug?.current}
                         onClick={() => setSelectedProject(project)}
-                        style={{
-                            padding: '15px',
-                            background: selectedProject === project ? 'rgba(0, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.4)',
-                            border: selectedProject === project ? '1px solid #00ffff' : '1px solid rgba(0, 255, 255, 0.1)',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                            fontFamily: 'monospace',
-                            color: selectedProject === project ? '#fff' : '#aaaaaa'
-                        }}
+                        className={selectedProject === project ? styles.projectItemActive : styles.projectItem}
                     >
-                        {project.title}
+                        &gt; {project.title}
                     </div>
                 ))}
             </div>
 
             {/* MAIN DETAIL VIEW */}
-            <div style={{
-                flex: 1,
-                overflowY: 'auto',
-                padding: '20px',
-                background: 'rgba(0, 0, 0, 0.6)',
-                border: '1px solid rgba(0, 255, 255, 0.1)',
-                borderRadius: '8px',
-                scrollbarWidth: 'none'
-            }}>
-                {selectedProject && (
+            <div className={`${styles.detailView} ${sharedStyles.holographicCard}`}>
+                {selectedProject ? (
                     <div className="project-detail-content">
-                        <h2 style={{ color: '#00ffff', fontSize: '2.5rem', marginBottom: '10px', fontFamily: 'monospace' }}>
+                        <h2 className={styles.detailTitle}>
                             {selectedProject.title}
                         </h2>
 
                         {/* Tech Stack */}
-                        <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <div className={styles.techStack}>
                             {selectedProject.technologies?.map((tech, i) => (
-                                <span key={i} style={{
-                                    color: '#00ffff',
-                                    border: '1px solid #00ffff',
-                                    padding: '2px 8px',
-                                    fontSize: '0.8rem',
-                                    borderRadius: '4px'
-                                }}>
+                                <span key={i} className={styles.techBadge}>
                                     {tech}
                                 </span>
                             ))}
@@ -118,66 +78,35 @@ const ProjectList = () => {
                             <img
                                 src={urlFor(selectedProject.mainImage).width(800).url()}
                                 alt={selectedProject.title}
-                                style={{ width: '100%', maxHeight: '400px', objectFit: 'cover', borderRadius: '4px', marginBottom: '20px' }}
+                                className={styles.mainImage}
                             />
                         )}
 
-                        <p style={{
-                            color: '#cccccc',
-                            lineHeight: '1.6',
-                            fontSize: '1.1rem',
-                            whiteSpace: 'pre-wrap',
-                            marginBottom: '30px'
-                        }}>
+                        <p className={styles.description}>
                             {selectedProject.description}
                         </p>
 
-                        <div style={{ display: 'flex', gap: '20px' }}>
+                        <div className={styles.actions}>
                             {selectedProject.liveUrl && (
-                                <a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer" style={btnStyle}>
-                                    LIVE DEMO
+                                <a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer" className={styles.actionBtn}>
+                                    LIVE_DEMO
                                 </a>
                             )}
                             {selectedProject.repoUrl && (
-                                <a href={selectedProject.repoUrl} target="_blank" rel="noopener noreferrer" style={btnStyle}>
-                                    SOURCE CODE
+                                <a href={selectedProject.repoUrl} target="_blank" rel="noopener noreferrer" className={styles.actionBtn}>
+                                    KOD_ŹRÓDŁOWY
                                 </a>
                             )}
                         </div>
                     </div>
+                ) : (
+                    <div style={{ color: '#666', textAlign: 'center', marginTop: '100px', fontFamily: 'monospace' }}>
+                        WYBIERZ PROJEKT Z LISTY ABY ZOBACZYĆ SZCZEGÓŁY
+                    </div>
                 )}
             </div>
-
-            {/* CSS for Mobile Logic (Media Queries should be in CSS file, but checking window width inline for simplicity first or use css module) */}
-            <style>{`
-                @media (max-width: 768px) {
-                    div[style*="flex-direction: row"] {
-                        flex-direction: column !important;
-                        height: auto !important;
-                    }
-                    div[style*="width: 300px"] {
-                        width: 100% !important;
-                        max-height: 200px;
-                        overflow-y: auto;
-                        border-right: none !important;
-                        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-                    }
-                }
-            `}</style>
         </div>
     );
-};
-
-const btnStyle = {
-    background: 'rgba(0, 255, 255, 0.1)',
-    border: '1px solid #00ffff',
-    color: '#00ffff',
-    padding: '10px 20px',
-    textDecoration: 'none',
-    fontFamily: 'monospace',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease'
 };
 
 export default ProjectList;

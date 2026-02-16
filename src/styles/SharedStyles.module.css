@@ -1,0 +1,166 @@
+/* SharedStyles.module.css */
+
+/* --- Layout Containers --- */
+.pageContainer {
+    width: 100%;
+    height: 100vh;
+    /* Changed from min-height to height for scrolling */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    overflow-x: hidden;
+    padding: 120px 20px 100px;
+    /* Top padding for Navbar, Bottom for footer/return btn */
+    max-width: 1200px;
+    /* Reduced specific width for better text readability */
+    margin: 0 auto;
+    box-sizing: border-box;
+    color: #e0e0e0;
+    position: relative;
+    z-index: 10;
+}
+
+/* --- Typography --- */
+.neonText {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    color: #fff;
+    text-shadow:
+        0 0 5px rgba(0, 255, 255, 0.5),
+        0 0 10px rgba(0, 255, 255, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.codeText {
+    font-family: 'VT323', monospace;
+    color: #00ffff;
+    letter-spacing: 1px;
+}
+
+.sectionTitle {
+    /* composes: neonText; - Replacing with explicit styles to avoid linter warning */
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    color: #fff;
+    text-shadow:
+        0 0 5px rgba(0, 255, 255, 0.5),
+        0 0 10px rgba(0, 255, 255, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+/* --- Cards & Panels --- */
+.holographicCard {
+    background: rgba(10, 20, 30, 0.6);
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.holographicCard::before {
+    /* Corner Accent - Top Left */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-top: 2px solid #00ffff;
+    border-left: 2px solid #00ffff;
+    opacity: 0.7;
+}
+
+.holographicCard::after {
+    /* Corner Accent - Bottom Right */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border-bottom: 2px solid #00ffff;
+    border-right: 2px solid #00ffff;
+    opacity: 0.7;
+}
+
+.holographicCard:hover {
+    border-color: rgba(0, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+    background: rgba(10, 20, 30, 0.7);
+    transform: translateY(-2px);
+}
+
+/* --- Buttons --- */
+.cyberButton {
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid #00ffff;
+    color: #00ffff;
+    padding: 10px 24px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.cyberButton:hover {
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+    text-shadow: 0 0 5px #00ffff;
+}
+
+/* --- Media --- */
+.photoFrame {
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.photoFrame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(0deg,
+            rgba(0, 255, 255, 0.05) 0px,
+            rgba(0, 255, 255, 0.05) 1px,
+            transparent 1px,
+            transparent 2px);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.photoFrame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Removed filters as requested */
+    /* filter: sepia(20%) hue-rotate(180deg) contrast(110%); */
+    transition: filter 0.3s ease;
+}
+
+.photoFrame:hover img {
+    filter: none;
+}

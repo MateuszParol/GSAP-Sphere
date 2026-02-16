@@ -4,70 +4,83 @@
 
 ## Overview
 
-GSAP-Sphere is a 3D interactive visualization application built with React and Three.js. It features a rotating sphere composed of particles, where specific points can be clicked to reveal information or a contact form. The application uses GSAP for animations and EmailJS for handling contact form submissions.
+The application is a **3D Immersive Portfolio** built with React, Three.js (R3F), and GSAP. It features a "Sci-Fi / Cyber" aesthetic with a central navigation sphere that transitions into standard 2D content pages using a "Warp" effect. Content is managed via Sanity Headless CMS.
 
 ```mermaid
 graph TD
-    User[User] --> Scene
-    Scene --> Canvas
-    Scene --> UI[UI Layer]
+    User[User] --> Entry[App.jsx / Router]
+    Entry --> Layout[MainLayout.jsx]
     
-    subgraph "3D World (R3F)"
-        Canvas --> Stars[Starfield Environment]
-        Canvas --> Sphere[Particle Sphere]
-        Canvas --> Controls[Orbit Controls]
+    subgraph "3D Experience (Home)"
+        Layout --> Home[Home.jsx]
+        Home --> Scene[Scene.jsx]
+        Scene --> Sphere[ParticleSphere.jsx]
+        Scene --> Stars[Stars.jsx]
     end
-    
-    subgraph "UI Layer"
-        UI --> Legend
-        UI --> Overlay[Info Overlay]
-        UI --> Contact[Contact Modal]
+
+    subgraph "Content Pages"
+        Layout --> About[About.jsx]
+        Layout --> Projects[CaseStudies.jsx]
+        Layout --> Contact[Contact.jsx]
+        Projects --> Sanity[Sanity CMS]
     end
-    
-    subgraph "Data & Utils"
-        Sphere --> Data[points.js]
-        Contact --> Email[email.js / EmailJS]
+
+    subgraph "Shared State"
+        Ctx[TransitionContext.jsx]
     end
+
+    Scene -- "Triggers Warp" --> Ctx
+    Ctx -- "Controls Nav" --> Entry
 ```
 
 ## Components
 
-### Core (`src/components/`)
-- **Scene.jsx**: Main entry point for the 3D scene. Manages global state (active point), camera, lighting, and layout.
-  - **Location:** `src/components/Scene.jsx`
-  - **Dependencies:** `ParticleSphere`, `Starfield`, `Legend`, `Overlay`, `ContactModal`
+### Core
+- **App.jsx**: Application entry point. Configures `BrowserRouter`, `TransitionProvider`, and Routes.
+- **MainLayout.jsx**: Global layout wrapper. Handles `Navbar`, `GlitchOverlay`, and "Return to Map" navigation.
+- **TransitionContext.jsx**: Manages global transition states (`isWarping`, `isGlitching`) and provides `navigateWithWarp` utility.
 
-### 3D Elements (`src/components/Sphere/`, `src/components/Environment/`)
-- **ParticleSphere**: The central interactive sphere. Handles particle rendering and click events.
-- **Stars**: Renders the background starfield.
+### 3D Scene
+- **Scene.jsx**: Main R3F Canvas. Orchestrates the 3D environment.
+- **ParticleSphere.jsx**: Interactive navigation menu. Points on the sphere trigger routing.
+- **Stars.jsx**: Background starfield. Reacts to warp state (speed increase).
+- **ContactModal.jsx**: (Legacy/Hybrid) 3D overlay for contact form (uses EmailJS).
 
-### UI (`src/components/UI/`)
-- **Legend**: Displays the legend/key for the visualization.
-- **Overlay**: Shows detailed information when a point on the sphere is clicked.
-- **ContactModal**: A modal form for user contact, triggered by specific sphere points.
+### CMS Integration
+- **sanityClient.js**: Configures Sanity Client (`@sanity/client`) and Image Builder.
+- **ProjectList.jsx**: Fetches and displays projects from Sanity. Uses inline styling and simple master-detail view.
 
 ## Data Flow
 
-1. **User Interaction**: User interaction (click) on the `ParticleSphere` triggers an event.
-2. **State Update**: `Scene.jsx` receives the event and updates the `activePoint` state.
-3. **UI Rendering**: 
-   - `Overlay` or `ContactModal` renders based on the `activePoint` ID.
-   - `OrbitControls` auto-rotation pauses while interacting.
-4. **External Action**: Submitting the form in `ContactModal` calls `sendContactForm` in `email.js` to send an email via EmailJS.
+### Navigation
+1.  User clicks a point on `ParticleSphere`.
+2.  `Scene` calls `navigateWithWarp('/path')` from `TransitionContext`.
+3.  `isWarping` state becomes `true`.
+4.  `Stars` accelerate; `ParticleSphere` distorts.
+5.  After timeout (1.5s), Router navigates to target page.
+6.  `isWarping` becomes `false`.
+
+### Content
+1.  `CaseStudies` page renders `ProjectList`.
+2.  `ProjectList` fetches data from Sanity API (`*[_type == "project"]`).
+3.  Data is stored in local state and rendered.
 
 ## Integration Points
 
 | Service | Type | Purpose |
 |---------|------|---------|
-| EmailJS | API | Sending emails from the contact form (`src/utils/email.js`) |
+| **Sanity.io** | Headless CMS | Stores project data (title, desc, images, tech stack). |
+| **EmailJS** | Email API | Sends contact form submissions from `ContactModal`. |
 
 ## Technical Debt
 
-- [ ] **Hardcoded EmailJS Credentials**: `src/utils/email.js` contains hardcoded service/template IDs and public key. These should be moved to environment variables.
-- [ ] **Prop Drilling**: Simple state management, currently manageable but could scale poorly.
+- [ ] **Inline Styles**: `ProjectList.jsx` and `MainLayout.jsx` use heavy inline styles instead of CSS Modules or Tailwind.
+- [ ] **Hardcoded Config**: Sanity Project ID and EmailJS keys are hardcoded in source files (`sanityClient.js`, `email.js`).
+- [ ] **Mixed Routing**: Some navigation is 3D-based (Sphere), some is 2D (Navbar). Needs consistent history management.
+- [ ] **Accessibility**: 3D Canvas lacks keyboard navigation support.
 
 ## Conventions
 
-**Naming:** PascalCase for components, camelCase for functions/vars.
-**Structure:** Component-based folder structure (atomic design-ish).
-**Testing:** No testing framework set up or tests found.
+- **State**: Context API for global transitions; Local state for UI/Forms.
+- **Styling**: Mixed (CSS Modules, Global CSS, Inline Styles).
+- **Animations**: GSAP for UI transitions; R3F `useFrame` for 3D animations.

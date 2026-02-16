@@ -6,44 +6,52 @@
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| Node.js | (System) | Build runtime |
-| React | ^18.2.0 | UI Framework |
+| **React** | 18.2.0 | Core UI Library |
+| **Vite** | 4.4.5 | Build Tool / Dev Server |
 
 ## Dependencies
 
-### Production
+### Core
 | Package | Version | Purpose |
 |---------|---------|---------|
-| @emailjs/browser | ^4.4.1 | Sending emails from client-side |
-| @react-three/drei | ^10.7.7 | Helpers for React Three Fiber |
-| @react-three/fiber | ^8.18.0 | React renderer for Three.js |
-| @react-three/postprocessing | ^2.16.2 | Post-processing effects for R3F |
-| gsap | ^3.14.2 | Animation library |
-| postprocessing | ^6.38.2 | Dependency for @react-three/postprocessing |
-| react-dom | ^18.2.0 | React DOM renderer |
-| three | ^0.182.0 | 3D Library |
+| `react-router-dom` | ^7.13.0 | Client-side routing |
+| `three` | ^0.182.0 | 3D Graphics Library |
+| `@react-three/fiber` | ^8.18.0 | React renderer for Three.js |
+| `@react-three/drei` | ^9.122.0 | R3F Utilities/Helpers |
+| `gsap` | ^3.14.2 | 2D/UI Animations |
+| `framer-motion` | ^12.34.0 | React Animations (Page transitions) |
 
-### Development
+### CMS & Data
 | Package | Version | Purpose |
 |---------|---------|---------|
-| vite | ^4.4.5 | Build tool / Dev server |
-| eslint | ^8.45.0 | Linter |
-| @vitejs/plugin-react | ^4.0.3 | Vite React plugin |
+| `@sanity/client` | ^7.14.1 | Sanity CMS JavaScript Client |
+| `@sanity/image-url` | ^2.0.3 | Sanity Image Helper |
+| `@emailjs/browser` | ^4.4.1 | Email Service |
+
+### Post-Processing
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `postprocessing` | ^6.38.2 | Shader effects core |
+| `@react-three/postprocessing` | ^2.16.2 | R3F wrapper for postprocessing |
 
 ## Infrastructure
 
 | Service | Provider | Purpose |
 |---------|----------|---------|
-| EmailJS | EmailJS | Contact form email delivery |
+| **CMS** | Sanity.io | Project Case Studies |
+| **Email** | EmailJS | Contact Form Backend |
+| **Hosting** | (TBD) | Vercel / Netlify recommended |
 
 ## Configuration
 
 | Variable | Purpose | Location |
 |----------|---------|----------|
-| SERVICE_ID | EmailJS Service ID | `src/utils/email.js` (Hardcoded) |
-| TEMPLATE_ID | EmailJS Template ID | `src/utils/email.js` (Hardcoded) |
-| PUBLIC_KEY | EmailJS Public Key | `src/utils/email.js` (Hardcoded) |
+| `projectId` | Sanity Config | `src/sanityClient.js` |
+| `dataset` | Sanity Config | `src/sanityClient.js` |
+| `SERVICE_ID` | EmailJS | `src/utils/email.js` |
+| `TEMPLATE_ID` | EmailJS | `src/utils/email.js` |
+| `PUBLIC_KEY` | EmailJS | `src/utils/email.js` |
 
-## Outdated Packages
+## Outdated Packages (Key)
 
-*Run `npm outdated` to check for latest versions.*
+*None flagged as critical. `react-router-dom` v7 is very new.*

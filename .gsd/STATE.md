@@ -1,16 +1,14 @@
-# State
+## Current Position
+- **Phase**: 5 (Rebranding & Polish)
+- **Status**: Live / Verified
 
-## Current Phase
-**Phase 2: CMS Integration (Sanity.io)** -> **Completed (Frontend + Studio)**
-
-## Status
-**Completed**.
--   Installed `@sanity/client` and configured frontend.
--   **Manually scaffolded Sanity Studio** in `./studio`.
--   Configured Studio for Project ID `90u1xxaj`.
--   Installed Studio dependencies.
+## Last Session Summary
+Phase 5 Executed.
+- **Rebranding**: Changed site identity to "**Mateusz Parol**".
+- **Navbar**: Implemented sci-fi brand logo.
+- **About Page**: Added photo frame placeholder and 2-column layout.
+- **Polish**: Fixed CSS warnings and ensured responsiveness.
 
 ## Next Steps
--   **Run Studio**: `cd studio` -> `npm run dev`.
--   **Add Content**: Add projects via Studio UI.
--   **Phase 3: SEO & Performance**.
+- **Project Complete**: All planned phases are done.
+- **Maintenance**: Connect real domain and upload `photo.jpg`.

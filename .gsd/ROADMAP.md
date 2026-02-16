@@ -24,7 +24,7 @@
 - Create placeholders for `About`, `Offer`, `CaseStudies`.
 
 ### Phase 2: CMS Integration
-**Status**: ⬜ Not Started
+**Status**: ✅ Completed
 **Objective**: Connect Sanity.io for dynamic content management.
 - Initialize Sanity project.
 - Define schemas for `CaseStudy` (Title, Slug, Image, Description, Content).
@@ -32,7 +32,7 @@
 - Build "Admin" dashboard (hosted by Sanity).
 
 ### Phase 3: Content Pages Implementation
-**Status**: ⬜ Not Started
+**Status**: ✅ Completed
 **Objective**: Build the UI for new text-heavy pages.
 - **Offer Page**: Services list with pricing/details.
 - **About Page**: Bio and skills section.

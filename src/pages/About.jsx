@@ -49,11 +49,18 @@ const About = () => {
                             <img
                                 src="/photo.jpeg"
                                 alt="Mateusz Parol"
+                                loading="lazy"
+                                decoding="async"
                                 onError={(e) => {
                                     e.target.style.display = 'none';
                                     e.target.nextSibling.style.display = 'flex';
                                 }}
-                                style={{ maxWidth: '100%', height: '100%', borderRadius: '10px' }}
+                                style={{
+                                    maxWidth: '100%',
+                                    height: '100%',
+                                    borderRadius: '10px',
+                                    objectFit: 'cover' // Ensure aspect ratio
+                                }}
                             />
                             <div style={{
                                 display: 'none', // Hidden by default, shown on error

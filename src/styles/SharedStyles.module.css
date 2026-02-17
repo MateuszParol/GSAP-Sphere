@@ -57,9 +57,10 @@
 
 /* --- Cards & Panels --- */
 .holographicCard {
-    background: rgba(10, 20, 30, 0.6);
+    background: rgba(10, 20, 30, 0.85);
+    /* Slightly more opaque since blur is gone */
     border: 1px solid rgba(0, 255, 255, 0.15);
-    backdrop-filter: blur(5px);
+    /* backdrop-filter: blur(5px); REMOVED for performance */
     padding: 2rem;
     border-radius: 4px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);

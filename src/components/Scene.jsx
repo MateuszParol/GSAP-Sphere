@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import { Perf } from 'r3f-perf'
 
 import * as THREE from 'three'
 import Starfield from './Environment/Stars'
@@ -60,7 +61,8 @@ export default function Scene({ isWarping }) {
                 <Starfield isWarping={isWarping} />
                 <ParticleSphere onPointClick={handlePointClick} isWarping={isWarping} />
 
-
+                {/* Performance Monitor (toggle via ?debug=true) */}
+                {window.location.search.includes('debug=true') && <Perf position="top-left" />}
             </Canvas>
 
             <Legend />

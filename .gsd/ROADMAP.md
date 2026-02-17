@@ -40,7 +40,7 @@
 - Ensure "Sci-Fi" aesthetic carries over to text pages (fonts, backgrounds).
 
 ### Phase 4: SEO & Optimization
-**Status**: ⬜ Not Started
+**Status**: ✅ Completed
 **Objective**: Make the site visible to Google.
 - Install `react-helmet-async`.
 - Add canonical tags, dynamic titles/descriptions.
@@ -48,7 +48,7 @@
 - Generate `sitemap.xml` and `robots.txt`.
 
 ### Phase 5: Polish & Interactions
-**Status**: ⬜ Not Started
+**Status**: ✅ Completed
 **Objective**: High-end animations and transitions.
 - Page transition animations (GSAP).
 - Mobile responsiveness adjustments.

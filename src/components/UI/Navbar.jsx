@@ -5,23 +5,33 @@ import TransitionLink from './TransitionLink';
 const Navbar = () => {
     const location = useLocation();
 
+    // Media query hook or simple check
+    const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
+
+    React.useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const navStyles = {
         position: 'fixed',
         top: '20px',
         left: '20px',
         right: '20px',
-        height: '60px',
+        height: isMobile ? 'auto' : '60px',
         background: 'rgba(0, 0, 0, 0.6)',
         backdropFilter: 'blur(10px)',
         border: '1px solid rgba(0, 255, 255, 0.3)',
         borderRadius: '12px',
-        padding: '0 2rem',
+        padding: isMobile ? '1rem' : '0 2rem',
         zIndex: 1000,
         display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         boxShadow: '0 0 15px rgba(0, 255, 255, 0.2)',
-        flexWrap: 'wrap', // Allow wrapping on small screens
+        gap: isMobile ? '1rem' : '0',
     };
 
     const brandStyles = {
@@ -38,7 +48,9 @@ const Navbar = () => {
 
     const linkContainerStyles = {
         display: 'flex',
-        gap: '2rem'
+        gap: isMobile ? '1rem' : '2rem',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
     };
 
     const getLinkStyles = (path) => {
@@ -49,7 +61,7 @@ const Navbar = () => {
             fontFamily: "'Courier New', Courier, monospace",
             textTransform: 'uppercase',
             letterSpacing: '2px',
-            fontSize: '0.9rem',
+            fontSize: isMobile ? '0.8rem' : '0.9rem',
             transition: 'color 0.3s ease, text-shadow 0.3s ease',
             textShadow: isActive ? '0 0 8px rgba(0, 255, 255, 0.6)' : 'none',
             cursor: 'pointer'

@@ -61,7 +61,7 @@ function App() {
                                         description="Skontaktuj się ze mną w sprawie współpracy. Formularz kontaktowy."
                                     />
                                     {/* Contact is technically a modal on Home usually, but if routed: */}
-                                    <Home />
+                                    <Contact />
                                 </>
                             } />
                         </Route>

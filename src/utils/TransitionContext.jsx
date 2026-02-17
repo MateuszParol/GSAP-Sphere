@@ -21,11 +21,15 @@ export const TransitionProvider = ({ children }) => {
 
     const navigateWithGlitch = (to) => {
         setIsGlitching(true);
-        // Glitch duration: 0.2s (aggressive)
+        // 1. Wait for glitch to cover screen (100ms approx)
         setTimeout(() => {
             navigate(to);
-            setIsGlitching(false);
-        }, 200);
+
+            // 2. Keep glitch active during page load/fade (300ms hold)
+            setTimeout(() => {
+                setIsGlitching(false);
+            }, 300);
+        }, 100);
     };
 
     const triggerGlitch = () => {

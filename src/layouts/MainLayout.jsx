@@ -4,6 +4,7 @@ import Navbar from '../components/UI/Navbar';
 import GlitchOverlay from '../components/UI/GlitchOverlay';
 import TransitionLink from '../components/UI/TransitionLink';
 import { useTransition } from '../utils/TransitionContext';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const MainLayout = () => {
     const location = useLocation();
@@ -35,9 +36,28 @@ const MainLayout = () => {
             <GlitchOverlay active={isGlitching} />
             <Navbar />
 
-            <main>
-                <Outlet />
-            </main>
+            <AnimatePresence mode="wait">
+                <motion.main
+                    key={location.pathname}
+                    initial={{ opacity: 0, filter: 'blur(10px)' }}
+                    animate={{
+                        opacity: 1,
+                        filter: 'blur(0px)',
+                        transition: {
+                            delay: 0.3, // Wait for glitch (approx 300ms post-nav)
+                            duration: 0.8,
+                            ease: 'easeOut'
+                        }
+                    }}
+                    exit={{
+                        opacity: 0,
+                        filter: 'blur(10px)',
+                        transition: { duration: 0.1 }
+                    }}
+                >
+                    <Outlet />
+                </motion.main>
+            </AnimatePresence>
 
             {/* Show "Return to Map" only on subpages */}
             {!isHome && (

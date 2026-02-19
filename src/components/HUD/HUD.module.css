@@ -2,8 +2,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100dvh;
     pointer-events: none;
     /* CRITICAL: Pass clicks through to 3D scene */
     z-index: 100;
@@ -231,4 +231,41 @@
 .bgLines {
     opacity: 0.4;
     /* Increased visibility */
+}
+
+/* --- MOBILE MINIMAL HUD --- */
+@media (max-width: 768px) {
+
+    /* Hide cluttered elements */
+    .dataLeft,
+    .dataRight,
+    .leftGrid,
+    .rightGrid,
+    .cornerTL,
+    .cornerTR,
+    .cornerBL,
+    .cornerBR {
+        display: none !important;
+    }
+
+    /* Simplify Top Bar */
+    .topBar {
+        top: 90px;
+        width: 100%;
+        justify-content: center;
+        gap: 15px;
+        font-size: 0.7rem;
+    }
+
+    /* Compact Compass */
+    .compassContainer {
+        bottom: 80px;
+        /* Give space for Return button / Navbar bottom */
+        transform: translateX(-50%) scale(0.8);
+    }
+
+    .hudContainer {
+        background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
+        /* Darker vignette on mobile */
+    }
 }

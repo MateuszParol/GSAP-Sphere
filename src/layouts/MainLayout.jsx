@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../components/UI/Navbar';
 import GlitchOverlay from '../components/UI/GlitchOverlay';
-import LoadingScreen from '../components/UI/LoadingScreen'; // Import LoadingScreen
+import LoadingScreen from '../components/UI/LoadingScreen';
 import TransitionLink from '../components/UI/TransitionLink';
-import HUDOverlay from '../components/HUD/HUDOverlay';
-import { useTransition } from '../utils/TransitionContext';
-import { AnimatePresence, motion } from 'framer-motion';
+import SubpageBackground from '../components/UI/SubpageBackground'; // Import Background
+import { useTransition } from '../utils/TransitionContext'; // Fixed missing import
+
+import HUDOverlay from '../components/HUD/HUDOverlay'; // Restored missing import
+import { AnimatePresence, motion } from 'framer-motion'; // Restored missing import
 
 const MainLayout = () => {
     const location = useLocation();
@@ -37,20 +39,23 @@ const MainLayout = () => {
     };
 
     return (
-        <div className="app-container">
-            {/* 1. Loading Screen (Only on first load, check session storage? For now, every refresh) */}
+        <div className="app-container" style={{ position: 'relative', overflow: 'hidden', height: '100dvh', width: '100vw' }}>
+            {/* 1. Loading Screen */}
             {!isSystemReady && <LoadingScreen onComplete={() => setIsSystemReady(true)} />}
 
-            {/* 2. UI Overlays - Only show HUD when system is ready to trigger entry animation */}
+            {/* 2. Subpage Background (Only on subpages, behind content) */}
+            {!isHome && isSystemReady && <SubpageBackground />}
+
+            {/* 3. UI Overlays */}
             <GlitchOverlay active={isGlitching} />
             <HUDOverlay active={isHome && isSystemReady} />
 
-            {/* 3. Navbar - Fade in after load? */}
+            {/* 4. Navbar */}
             <div style={{ position: 'relative', zIndex: 2000, pointerEvents: 'auto', opacity: isSystemReady ? 1 : 0, transition: 'opacity 1s ease' }}>
                 <Navbar />
             </div>
 
-            <AnimatePresence>
+            <AnimatePresence mode='wait'>
                 <motion.main
                     key={location.pathname}
                     initial={{ opacity: 0, filter: 'blur(10px)' }}
@@ -58,19 +63,22 @@ const MainLayout = () => {
                         opacity: 1,
                         filter: 'blur(0px)',
                         transition: {
-                            delay: 0.3,
-                            duration: 0.8,
+                            delay: 0.1,
+                            duration: 0.5,
                             ease: 'easeOut'
                         }
                     }}
                     exit={{
                         opacity: 0,
                         filter: 'blur(10px)',
-                        transition: { duration: 0.1 }
+                        transition: { duration: 0.3 }
                     }}
+                    style={{ position: 'relative', zIndex: 10, width: '100%', height: '100%', pointerEvents: 'none' }} // Content wrapper
                 >
-                    {/* Pass system state to children (Home/Scene) */}
-                    <Outlet context={{ isSystemReady }} />
+                    {/* Enable pointer events for actual content */}
+                    <div style={{ pointerEvents: 'auto', width: '100%', height: '100%' }}>
+                        <Outlet context={{ isSystemReady }} />
+                    </div>
                 </motion.main>
             </AnimatePresence>
 

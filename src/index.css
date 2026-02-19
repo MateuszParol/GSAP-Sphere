@@ -23,13 +23,25 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--bg-color);
-  overflow: hidden;
-  /* Prevent scroll */
+  overflow-x: hidden;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+html,
+body,
+#root {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 h1 {
@@ -67,14 +79,16 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}/* Light Mode Override - Keep it dark anyway for consistency with theme */
-@media (prefers-color-scheme: light) {
-    :root {
-        color: rgba(255, 255, 255, 0.87);
-        background-color: var(--bg-color);
-    }
+}
 
-    button {
-        background-color: #1a1a1a;
-    }
+/* Light Mode Override - Keep it dark anyway for consistency with theme */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: rgba(255, 255, 255, 0.87);
+    background-color: var(--bg-color);
+  }
+
+  button {
+    background-color: #1a1a1a;
+  }
 }

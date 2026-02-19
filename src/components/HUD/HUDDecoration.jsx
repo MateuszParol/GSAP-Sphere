@@ -16,29 +16,46 @@ const HUDDecoration = () => {
         return () => clearInterval(timer);
     }, []);
 
-    // Entry Animation
+    // Entry Animation & Breathing Loop
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Animate Top Bar sliding down
-            gsap.to(topBarRef.current, {
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                ease: 'power3.out',
-                delay: 0.5
-            });
+            const tl = gsap.timeline();
 
-            // Animate Grids fading in
-            gsap.to(`.${styles.leftGrid}`, {
-                x: 0, opacity: 1, duration: 1.5, ease: 'power2.out', delay: 0.8
-            });
-            gsap.to(`.${styles.rightGrid}`, {
-                x: 0, opacity: 1, duration: 1.5, ease: 'power2.out', delay: 0.8
-            });
+            // 1. Entry Sequence
+            tl.to(topBarRef.current, {
+                y: 0, opacity: 1, duration: 1, ease: 'power3.out', delay: 0.5
+            })
+                .to(`.${styles.leftGrid}`, {
+                    x: 0, yPercent: -50, opacity: 1, duration: 1.5, ease: 'power2.out'
+                }, "-=0.8")
+                .to(`.${styles.rightGrid}`, {
+                    x: 0, yPercent: -50, opacity: 1, duration: 1.5, ease: 'power2.out'
+                }, "-=1.5")
+                .to(`.${styles.bgLines}`, {
+                    scale: 1, opacity: 1, duration: 2, ease: 'power2.out'
+                }, "-=1.5");
 
-            // Animate Background Lines
-            gsap.to(`.${styles.bgLines}`, {
-                scale: 1, opacity: 1, duration: 2, ease: 'power2.out'
+            // 2. Idle "Breathing" Animation (after entry)
+            // We use a separate tween for the loop to avoid blocking the timeline
+            tl.call(() => {
+                // Top Bar Breathing
+                gsap.to(topBarRef.current, {
+                    opacity: 0.7,
+                    duration: 3,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+
+                // Grids Breathing (slightly offset)
+                gsap.to([`.${styles.leftGrid}`, `.${styles.rightGrid}`], {
+                    opacity: 0.6,
+                    duration: 4,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: 0.5
+                });
             });
 
         }, containerRef);
@@ -76,7 +93,7 @@ const HUDDecoration = () => {
             </div>
 
             {/* SIDE VERTICAL GRIDS (Rulers) - Extended Range */}
-            <div className={styles.leftGrid} style={{ height: '300px', overflow: 'hidden', opacity: 0, transform: 'translateX(-50px)' }}>
+            <div className={styles.leftGrid} style={{ height: '300px', overflow: 'hidden', opacity: 0, transform: 'translate(-50px, -50%)' }}>
                 {/* Moving Container - Centered */}
                 <div ref={leftGridRef} style={{ position: 'absolute', top: '50%', left: 0, width: '100%', marginTop: '-1200px', willChange: 'transform' }}>
                     {/* Render a tall ladder: -50 to +50 ticks (approx -125 to +125 degrees) */}
@@ -92,7 +109,7 @@ const HUDDecoration = () => {
                 <div style={{ position: 'absolute', top: '50%', left: 0, width: '20px', height: '1px', background: 'red', zIndex: 10 }}></div>
             </div>
 
-            <div className={styles.rightGrid} style={{ height: '300px', overflow: 'hidden', opacity: 0, transform: 'translateX(50px)' }}>
+            <div className={styles.rightGrid} style={{ height: '300px', overflow: 'hidden', opacity: 0, transform: 'translate(50px, -50%)' }}>
                 <div ref={rightGridRef} style={{ position: 'absolute', top: '50%', right: 0, width: '100%', marginTop: '-1200px', willChange: 'transform' }}>
                     <svg width="20" height="2400" viewBox="0 0 20 2400">
                         {Array.from({ length: 101 }, (_, i) => i - 50).map(i => (

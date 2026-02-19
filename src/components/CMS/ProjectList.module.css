@@ -3,7 +3,7 @@
 .container {
     display: flex;
     flex-direction: row;
-    height: calc(100vh - 150px);
+    height: calc(100dvh - 150px);
     /* Adjust based on navbar/padding */
     gap: 20px;
     max-width: 1400px;
@@ -170,8 +170,7 @@
 @media (max-width: 900px) {
     .container {
         flex-direction: column;
-        padding-top: 80px;
-        /* Space for Navbar */
+        /* padding-top: 0; Parent handles it */
         height: auto;
         min-height: 100vh;
         overflow-y: auto;

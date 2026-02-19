@@ -41,12 +41,10 @@ function CompassUpdater() {
 
 export default function Scene({ isWarping, isSystemReady }) {
     const [activePoint, setActivePoint] = useState(null)
-    const controlsRef = useRef(null) // Ref for controls
-    const { navigateWithWarp } = useTransition()
+    const controlsRef = useRef(null)
+    const { navigateWithGlitch } = useTransition()
 
     const handlePointClick = (point) => {
-        // Map points to routes
-        // Centralized route definition
         const routes = {
             'about': '/about',
             'works': '/projects',
@@ -55,10 +53,8 @@ export default function Scene({ isWarping, isSystemReady }) {
         }
 
         if (routes[point.id]) {
-            // Navigate with Warp effect
-            navigateWithWarp(routes[point.id])
+            navigateWithGlitch(routes[point.id])
         } else {
-            // Default behavior for other points (e.g. socials or info)
             setActivePoint(point)
         }
     }
@@ -67,18 +63,16 @@ export default function Scene({ isWarping, isSystemReady }) {
         setActivePoint(null)
     }
 
-    // Helper to check if point is a route to prevent overlay flashing before nav
     const routes = { 'about': '/about', 'works': '/projects', 'contact': '/contact', 'offer': '/offer' }
-
-    const isContactOpen = activePoint?.id === 'contact' // This likely won't be used if we navigate away, but keeping for safety
-    const isInfoOpen = activePoint && !routes[activePoint.id] // Only show overlay if it's NOT a route
+    const isContactOpen = activePoint?.id === 'contact'
+    const isInfoOpen = activePoint && !routes[activePoint.id]
 
     // Distance configuration
     const CAMERA_DIST = 6;
 
     return (
-        <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-            <Canvas camera={{ position: [0, 0, CAMERA_DIST], fov: 75 }} gl={{ antialias: false }}>
+        <div style={{ width: '100vw', height: '100dvh', position: 'relative' }}>
+            <Canvas dpr={[1, 2]} camera={{ position: [0, 0, CAMERA_DIST], fov: 75 }} gl={{ antialias: false }}>
                 <color attach="background" args={['#000000']} />
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} />
@@ -86,18 +80,17 @@ export default function Scene({ isWarping, isSystemReady }) {
                 <OrbitControls
                     ref={controlsRef}
                     makeDefault
-                    enabled={isSystemReady} // Enable as soon as system is ready
-                    enableZoom={false}      // Lock zoom
-                    enablePan={false}       // Lock pan
-                    enableDamping={true}    // Smooth rotation
+                    enabled={isSystemReady}
+                    enableZoom={false}
+                    enablePan={false}
+                    enableDamping={true}
                     dampingFactor={0.05}
-                    minDistance={CAMERA_DIST}       // Closer fix
-                    maxDistance={CAMERA_DIST}       // Closer fix
+                    minDistance={CAMERA_DIST}
+                    maxDistance={CAMERA_DIST}
                     autoRotate={isSystemReady && !activePoint}
                     autoRotateSpeed={0.5}
                 />
 
-                {/* Standard Content without Parallax */}
                 <Starfield isWarping={isWarping} />
                 <ParticleSphere onPointClick={handlePointClick} isWarping={isWarping} />
 
@@ -107,11 +100,9 @@ export default function Scene({ isWarping, isSystemReady }) {
                     isWarping={isWarping}
                 />
 
-                {/* Performance Monitor (toggle via ?debug=true) */}
                 {window.location.search.includes('debug=true') && <Perf position="top-left" />}
             </Canvas>
 
-            {/* <Legend /> Removed per user request */}
             {isInfoOpen && <Overlay activePoint={activePoint} onClose={handleClose} />}
             <ContactModal isOpen={isContactOpen} onClose={handleClose} />
         </div>

@@ -9,9 +9,12 @@ import CaseStudies from './pages/CaseStudies';
 import Contact from './pages/Contact'; // Assuming Contact page exists or is modal only
 import { TransitionProvider } from './utils/TransitionContext';
 import SEO from './components/Utils/SEO';
+import ReloadPrompt from './components/Utils/ReloadPrompt';
+import useAntiTheft from './hooks/useAntiTheft';
 import './App.css';
 
 function App() {
+    useAntiTheft();
     return (
         <HelmetProvider>
             <BrowserRouter>
@@ -68,6 +71,7 @@ function App() {
                     </Routes>
                 </TransitionProvider>
             </BrowserRouter>
+            <ReloadPrompt />
         </HelmetProvider>
     );
 }

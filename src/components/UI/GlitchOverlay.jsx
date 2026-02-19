@@ -60,7 +60,7 @@ const GlitchOverlay = ({ active }) => {
                         top: 0,
                         left: 0,
                         width: '100vw',
-                        height: '100vh',
+                        height: '100dvh',
                         zIndex: 99999,
                         pointerEvents: 'none',
                         display: 'flex',
@@ -84,11 +84,14 @@ const GlitchOverlay = ({ active }) => {
                     <h1 ref={textRef} style={{
                         color: '#fff',
                         fontFamily: 'monospace',
-                        fontSize: '5rem',
-                        letterSpacing: '0.5rem',
+                        fontSize: 'clamp(2rem, 8vw, 5rem)',
+                        letterSpacing: 'clamp(0.2rem, 1vw, 0.5rem)',
                         textTransform: 'uppercase',
                         position: 'relative',
-                        zIndex: 4
+                        zIndex: 4,
+                        textAlign: 'center',
+                        padding: '0 20px',
+                        wordBreak: 'break-word'
                     }}>
                         SYSTEM_RESET
                     </h1>

@@ -38,7 +38,7 @@ const About = () => {
         <div className={styles.pageContainer} ref={containerRef}>
             <h1 className={styles.sectionTitle}>// DANE_PERSONELU: <span style={{ color: '#fff' }}>O MNIE</span></h1>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
 
                 {/* BIO SECTION */}
                 <div className={`${styles.holographicCard} card-anim`} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>

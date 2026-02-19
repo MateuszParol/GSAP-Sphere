@@ -1,6 +1,6 @@
 .container {
     width: 100vw;
-    min-height: 100vh;
+    min-height: 100dvh;
     padding: 100px 5% 50px 5%;
     display: flex;
     justify-content: center;

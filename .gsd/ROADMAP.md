@@ -1,18 +1,18 @@
 # ROADMAP.md
 
-> **Current Milestone**: v1.0-SEO-Portfolio
-> **Goal**: Transform the 3D demo into a professional, SEO-optimized portfolio with content management.
+> **Completed Milestone**: v3.0-Security-Hardening (2026-02-19)
+> **Previous Milestone**: v2.0-Immersive-Homepage (2026-02-19)
+> **Current Milestone**: v4.0-Experience-Polish
+> **Goal**: Final polish, easter eggs, and advanced gamification (TBD).
 
 ## Must-Haves
-- [ ] Multi-page routing (Home, About, Offer, Case Studies).
-- [ ] Headless CMS Integration (Sanity.io) for managing projects.
-- [ ] SEO Meta Tags (Title, Description) per page.
-- [ ] Performance Optimization (Lazy loaded 3D).
+- [ ] TBD
 
 ## Phases
 
-### Phase 1: Foundation & Architecture
-**Status**: ✅ Completed
+### Phase 1: Planning
+**Status**: ⬜ Not Started
+**Objective**: Define scope for v4.0.
 **Plan**: [PLAN.md](phases/1/PLAN.md)
 **Objective**: Set up Router, layouts, and project structure for multiple pages.
 - Install `react-router-dom`.
@@ -82,16 +82,25 @@
 - [x] Ensure color contrast and visibility (Neon Colors, 2px thickness).
 
 ### Phase 4: Advanced Animations (WOW Factor)
-**Status**: ⬜ Not Started
+**Status**: ✅ Completed
 **Objective**: Polish interactions with GSAP.
 - Animate HUD entry (drawing lines, fading in).
 - Animate "Bubbles" on hover (expand, reveal text).
 - Refine Glitch/Warp transitions (shorter, impactful).
 - Add camera movement animations on interaction.
 
-### Phase 5: Verification & Mobile
-**Status**: ⬜ Not Started
-**Objective**: Ensure it works on all devices.
-- Mobile HUD layout.
-- Touch event handling for 3D scene.
-- Performance testing on low-end devices.
+### Phase 5: Verification & Mobile (v2.0)
+**Status**: ✅ Completed
+  - [x] **Goal:** Ensure smooth experience on devices.
+  - [x] **Tasks:**
+    - [x] Responsive CSS audit (`dvh` units)
+    - [x] Mobile HUD with media queries
+    - [x] Touch optimization for Sphere (larger hitboxes)
+    - [x] Lighthouse audit & performance tuning on low-end devices.
+
+### Phase 6: PWA & Final Optimization
+**Status**: ✅ Completed
+**Goal**: Installability and 100/100 Lighthouse score.
+- [x] Add `manifest.json` and service workers (PWA).
+- [x] Asset optimization (compression, caching).
+- [x] Systematic Lighthouse Audit (SEO, Accessibility, Best Practices).

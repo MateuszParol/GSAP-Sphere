@@ -33,14 +33,8 @@ export default function Starfield({ isWarping }) {
     useFrame((state, delta) => {
         if (shaderRef.current) {
             shaderRef.current.uniforms.uTime.value = state.clock.elapsedTime
-
-            // Smooth Speed Transition
-            const targetSpeed = isWarping ? 20.0 : 0.5
-            shaderRef.current.uniforms.uSpeed.value = THREE.MathUtils.lerp(
-                shaderRef.current.uniforms.uSpeed.value,
-                targetSpeed,
-                delta * 2.0
-            )
+            // Constant calm speed
+            shaderRef.current.uniforms.uSpeed.value = 0.5
         }
     })
 

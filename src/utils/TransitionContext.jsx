@@ -14,16 +14,17 @@ export const TransitionProvider = ({ children }) => {
     useEffect(() => {
         // We defer the reset slightly to ensure the "exit" animation of the previous page
         // doesn't snap, but 'isWarping'/locks shouldn't block interaction.
-        // Actually, we should probably clear 'isWarping' immediately if we arrived.
 
-        // If we arrived, we are no longer warping to a destination.
-        setIsWarping(false);
+        // REMOVED: setIsWarping(false) to allow warp animation to finish via its own timeout
+        // even after route change.
 
         // Glitch might be desired during entry, handled by the timeout in navigateWithGlitch.
         // But if it got stuck, we ensure it eventually clears.
         const safetyTimer = setTimeout(() => {
             if (isGlitching) setIsGlitching(false);
-        }, 1000);
+            // Safety cleanup for warp if it gets stuck for too long (longer than the 1s timeout)
+            if (isWarping) setIsWarping(false);
+        }, 1500); // 1.5s is enough for the 1s warp to finish + buffer
 
         return () => clearTimeout(safetyTimer);
     }, [location.pathname]);

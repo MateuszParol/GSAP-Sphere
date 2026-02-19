@@ -27,10 +27,10 @@ const Contact = () => {
             <h1 className={styles.sectionTitle}>// PROTOKÓŁ_TRANSMISJI: <span style={{ color: '#fff' }}>KONTAKT</span></h1>
 
             <div className={`contact-content ${styles.holographicCard}`} style={{ maxWidth: '800px', margin: '0 auto' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'start' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', alignItems: 'start' }}>
 
                     {/* LEFT COLUMN: Info */}
-                    <div>
+                    <div style={{ flex: '1 1 300px', minWidth: '0' }}>
                         <h3 className={styles.neonText} style={{ marginBottom: '1.5rem', color: '#00ffff' }}>
                             KANAŁY_KOMUNIKACJI
                         </h3>
@@ -53,22 +53,12 @@ const Contact = () => {
                     </div>
 
                     {/* RIGHT COLUMN: Form */}
-                    <div>
+                    <div style={{ flex: '1 1 300px', minWidth: '0' }}>
                         <ContactForm />
                     </div>
 
                 </div>
             </div>
-
-            {/* Mobile Responsiveness Hack: wrapper for grid to stack on mobile */}
-            <style jsx>{`
-                @media (max-width: 768px) {
-                    .contact-content > div {
-                        grid-template-columns: 1fr !important;
-                        gap: 2rem !important;
-                    }
-                }
-            `}</style>
         </div>
     );
 };

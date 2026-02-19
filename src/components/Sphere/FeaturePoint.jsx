@@ -69,6 +69,12 @@ const FeaturePoint = ({ position, label, onClick, color = '#00ffff' }) => {
                 {/* Subtle Glow */}
                 <pointLight distance={0.8} intensity={1.5} color={color} />
 
+                {/* HITBOX (Invisible) - Larger area for easier touch/hover */}
+                <mesh visible={false}>
+                    <sphereGeometry args={[0.3, 16, 16]} />
+                    <meshBasicMaterial />
+                </mesh>
+
             </animated.group>
 
             {hovered && (

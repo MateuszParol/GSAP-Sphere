@@ -38,7 +38,7 @@ const About = () => {
         <div className={styles.pageContainer} ref={containerRef}>
             <h1 className={styles.sectionTitle}>// DANE_PERSONELU: <span style={{ color: '#fff' }}>O MNIE</span></h1>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
 
                 {/* BIO SECTION */}
                 <div className={`${styles.holographicCard} card-anim`} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -47,13 +47,20 @@ const About = () => {
                         {/* PHOTO - Moved above text */}
                         <div className={styles.photoFrame} style={{ maxWidth: '300px', width: '100%', aspectRatio: '1/1' }}>
                             <img
-                                src="/photo.jpeg"
+                                src="/photo.jpeg?v=2"
                                 alt="Mateusz Parol"
+                                loading="lazy"
+                                decoding="async"
                                 onError={(e) => {
                                     e.target.style.display = 'none';
                                     e.target.nextSibling.style.display = 'flex';
                                 }}
-                                style={{ maxWidth: '100%', height: '100%', borderRadius: '10px' }}
+                                style={{
+                                    maxWidth: '100%',
+                                    height: '100%',
+                                    borderRadius: '10px',
+                                    objectFit: 'cover' // Ensure aspect ratio
+                                }}
                             />
                             <div style={{
                                 display: 'none', // Hidden by default, shown on error

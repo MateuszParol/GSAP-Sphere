@@ -7,9 +7,12 @@ const SERVICE_ID = 'service_81ecy0l'
 const TEMPLATE_ID = 'template_pv7cjhd'
 const PUBLIC_KEY = '6uvsr6OQfioAXVUeW'
 
+// Check if keys are configured
+export const isEmailConfigured = SERVICE_ID !== 'YOUR_SERVICE_ID' && PUBLIC_KEY !== 'YOUR_PUBLIC_KEY';
+
 export const sendContactForm = (data) => {
     // If keys are missing, simulate success for dev/demo purposes
-    if (SERVICE_ID === 'YOUR_SERVICE_ID') {
+    if (!isEmailConfigured) {
         return new Promise((resolve) => {
             console.warn('[EmailJS] Keys not set. Simulating success.')
             console.log('[EmailJS] Data:', data)

@@ -3,7 +3,7 @@
 .container {
     display: flex;
     flex-direction: row;
-    height: calc(100vh - 150px);
+    height: calc(100dvh - 150px);
     /* Adjust based on navbar/padding */
     gap: 20px;
     max-width: 1400px;
@@ -167,18 +167,21 @@
     box-shadow: 0 0 15px #00ffff;
 }
 
-/* --- Mobile Responsiveness --- */
 @media (max-width: 900px) {
     .container {
         flex-direction: column;
+        /* padding-top: 0; Parent handles it */
         height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
     }
 
     .sidebar {
         width: 100%;
-        max-height: 250px;
+        height: auto;
+        max-height: 300px;
         border-right: none;
-        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(0, 255, 255, 0.3);
         padding-right: 0;
         padding-bottom: 20px;
     }
@@ -186,5 +189,14 @@
     .detailView {
         height: auto;
         min-height: 500px;
+        padding: 1.5rem;
+    }
+
+    .detailTitle {
+        font-size: 2rem;
+    }
+
+    .mainImage {
+        height: 200px;
     }
 }

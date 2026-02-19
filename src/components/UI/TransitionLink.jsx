@@ -2,12 +2,14 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTransition } from '../../utils/TransitionContext';
 
-const TransitionLink = ({ to, children, className, style }) => {
+const TransitionLink = ({ to, children, className, style, onClick }) => {
     const { navigateWithWarp, navigateWithGlitch } = useTransition();
     const location = useLocation();
 
     const handleClick = (e) => {
         e.preventDefault();
+
+        if (onClick) onClick(e); // Support for external click handlers (e.g. closing menu)
 
         if (location.pathname === to) return;
 
@@ -19,7 +21,7 @@ const TransitionLink = ({ to, children, className, style }) => {
         const isToHome = to === '/';
 
         if (isFromHome && !isToHome) {
-            navigateWithWarp(to);
+            navigateWithGlitch(to); // Changed from Warp to Glitch per user request
         } else {
             navigateWithGlitch(to);
         }

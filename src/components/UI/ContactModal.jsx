@@ -1,13 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { gsap } from 'gsap'
 import styles from './ContactModal.module.css'
-import { sendContactForm } from '../../utils/email'
+import ContactForm from './ContactForm'
 
 export default function ContactModal({ isOpen, onClose }) {
     const modalRef = useRef(null)
-    const formRef = useRef(null)
     const overlayRef = useRef(null)
-    const [status, setStatus] = useState('IDLE') // IDLE, SENDING, SUCCESS, ERROR
 
     useEffect(() => {
         if (isOpen) {
@@ -53,29 +51,10 @@ export default function ContactModal({ isOpen, onClose }) {
         }, '-=0.1')
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        setStatus('SENDING')
-
-        const formData = {
-            name: e.target.name.value,
-            email: e.target.email.value,
-            title: e.target.subject.value,
-            message: e.target.message.value
-        }
-
-        try {
-            await sendContactForm(formData)
-            setStatus('SUCCESS')
-            setTimeout(() => {
-                handleClose()
-                setStatus('IDLE')
-            }, 2000)
-        } catch (error) {
-            console.error("FAILED...", error)
-            if (error.text) console.error("EmailJS Error Text:", error.text)
-            setStatus('ERROR')
-        }
+    const handleSuccess = () => {
+        setTimeout(() => {
+            handleClose()
+        }, 2000)
     }
 
     if (!isOpen) return null
@@ -90,41 +69,7 @@ export default function ContactModal({ isOpen, onClose }) {
                     </button>
                 </div>
 
-                {status === 'SUCCESS' ? (
-                    <div className={styles.successMessage}>
-                        <h3>TRANSMISSION COMPLETE</h3>
-                        <p>Data packet sent successfully.</p>
-                    </div>
-                ) : (
-                    <form className={styles.form} onSubmit={handleSubmit} ref={formRef}>
-                        <div className={styles.inputGroup}>
-                            <label>IMIE I NAZWISKO</label>
-                            <input type="text" name="name" required placeholder="Wpisz identyfikator..." />
-                        </div>
-
-                        <div className={styles.inputGroup}>
-                            <label>EMAIL</label>
-                            <input type="email" name="email" required placeholder="Twój email..." />
-                        </div>
-
-                        <div className={styles.inputGroup}>
-                            <label>TEMAT</label>
-                            <input type="text" name="subject" required placeholder="Temat zgłoszenia..." />
-                        </div>
-
-                        <div className={styles.inputGroup}>
-                            <label>TREŚĆ PROBLEMU</label>
-                            <textarea name="message" required rows={4} placeholder="Opisz swój cel..." />
-                        </div>
-
-                        <div className={styles.actions}>
-                            <button type="submit" className={styles.submitBtn} disabled={status === 'SENDING'}>
-                                {status === 'SENDING' ? 'WYSYŁANIE...' : 'WYŚLIJ DANE'}
-                            </button>
-                            {status === 'ERROR' && <p className={styles.error}>BŁĄD WYSYŁANIA. SPRÓBUJ PONOWNIE.</p>}
-                        </div>
-                    </form>
-                )}
+                <ContactForm onSuccess={handleSuccess} />
 
                 <div className={styles.decorLeft}></div>
                 <div className={styles.decorRight}></div>

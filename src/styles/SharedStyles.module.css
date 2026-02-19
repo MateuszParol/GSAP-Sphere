@@ -3,7 +3,7 @@
 /* --- Layout Containers --- */
 .pageContainer {
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     /* Changed from min-height to height for scrolling */
     overflow-y: auto;
     /* Enable vertical scrolling */
@@ -48,18 +48,22 @@
     text-transform: uppercase;
     letter-spacing: 2px;
 
-    font-size: 3rem;
+    font-size: clamp(1.8rem, 5vw, 3rem);
     margin-bottom: 2rem;
     border-bottom: 1px solid rgba(0, 255, 255, 0.3);
     padding-bottom: 0.5rem;
     display: inline-block;
+    max-width: 100%;
+    word-wrap: break-word;
 }
+
 
 /* --- Cards & Panels --- */
 .holographicCard {
-    background: rgba(10, 20, 30, 0.6);
+    background: rgba(10, 20, 30, 0.85);
+    /* Slightly more opaque since blur is gone */
     border: 1px solid rgba(0, 255, 255, 0.15);
-    backdrop-filter: blur(5px);
+    /* backdrop-filter: blur(5px); REMOVED for performance */
     padding: 2rem;
     border-radius: 4px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);

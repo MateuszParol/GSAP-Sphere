@@ -1,0 +1,17 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#0a0a0a"/>
+  
+  <!-- Planet Body (Cyan) -->
+  <circle cx="256" cy="256" r="100" fill="#00ffff"/>
+  
+  <!-- Rings (Magenta) -->
+  <ellipse cx="256" cy="256" rx="180" ry="40" fill="none" stroke="#d946ef" stroke-width="40" transform="rotate(-20 256 256)"/>
+  
+  <!-- Planet Highlight (Pixel art style blocks) -->
+  <rect x="280" y="220" width="40" height="40" fill="#ffffff" fill-opacity="0.3"/>
+  <rect x="200" y="280" width="30" height="30" fill="#008b8b"/>
+
+  <!-- Ring varying width simulation (Pixel blocks) -->
+  <rect x="100" y="300" width="20" height="20" fill="#d946ef"/>
+  <rect x="380" y="180" width="20" height="20" fill="#d946ef"/>
+</svg>

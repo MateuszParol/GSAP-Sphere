@@ -1,23 +1,23 @@
 import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import styles from '../styles/SharedStyles.module.css';
+import TransitionLink from '../components/UI/TransitionLink';
 
 const Offer = () => {
     const containerRef = useRef(null);
     const services = [
         {
-            title: "TWORZENIE_APLIKACJI_WEB",
+            title: <>TWORZENIE_<wbr />APLIKACJI_<wbr />WEB</>,
             desc: "Budowanie skalowalnych, wydajnych aplikacji webowych przy użyciu React, Next.js i nowoczesnych wzorców architektury. Pełny cykl rozwoju od koncepcji po wdrożenie.",
             features: ["Architektura SPA / PWA", "Zarządzanie Stanem (Redux/Zustand)", "Integracja API"]
         },
         {
-            title: "IMMERSYJNE_DOŚWIADCZENIA_3D",
+            title: <>IMMERSYJNE_<wbr />DOŚWIADCZENIA_<wbr />3D</>,
             desc: "Tworzenie zachwycających wizualizacji 3D w przeglądarce przy użyciu Three.js i React Three Fiber. Interaktywne cząsteczki, shadery i symulacje fizyki.",
             features: ["WebGL / R3F", "Custom Shadery (GLSL)", "Optymalizacja Wydajności"]
         },
         {
-            title: "SEO_&_OPTYMALIZACJA",
+            title: <>SEO_&_<wbr />OPTYMALIZACJA</>,
             desc: "Optymalizacja zasobów cyfrowych dla maksymalnej widoczności i prędkości. Zapewnienie wysokich pozycji w Google i błyskawicznego ładowania.",
             features: ["Core Web Vitals", "Techniczne SEO", "Dostępność (WCAG)"]
         }
@@ -43,10 +43,10 @@ const Offer = () => {
         <div className={styles.pageContainer} ref={containerRef}>
             <h1 className={styles.sectionTitle}>// KATALOG_USŁUG: <span style={{ color: '#fff' }}>OFERTA</span></h1>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
                 {services.map((service, index) => (
                     <div key={index} className={`${styles.holographicCard} service-card`}>
-                        <h3 className={styles.neonText} style={{ fontSize: '1.4rem', marginBottom: '1rem', color: '#00ffff' }}>
+                        <h3 className={styles.neonText} style={{ fontSize: 'clamp(1rem, 5vw, 1.4rem)', marginBottom: '1rem', color: '#00ffff', overflowWrap: 'break-word', wordBreak: 'normal' }}>
                             {service.title}
                         </h3>
                         <p style={{
@@ -54,7 +54,8 @@ const Offer = () => {
                             color: '#ccc',
                             marginBottom: '1.5rem',
                             minHeight: '80px',
-                            textAlign: index === 1 ? 'justify' : 'left'
+                            textAlign: 'left',
+                            hyphens: 'auto'
                         }}>
                             {service.desc}
                         </p>
@@ -83,14 +84,14 @@ const Offer = () => {
             </div>
 
             <div style={{ marginTop: '4rem', textAlign: 'center', opacity: 0.7 }}>
-                <Link to="/contact" style={{ textDecoration: 'none' }}>
+                <TransitionLink to="/contact" style={{ textDecoration: 'none' }}>
                     <p className={`${styles.codeText} ${styles.neonText}`} style={{ cursor: 'pointer', transition: 'all 0.3s ease' }}
                         onMouseEnter={(e) => e.target.style.color = '#d946ef'}
                         onMouseLeave={(e) => e.target.style.color = '#00ffff'}
                     >
                         Potrzebujesz niestandardowego rozwiązania?
                     </p>
-                </Link>
+                </TransitionLink>
                 <div style={{ width: '1px', height: '40px', background: 'linear-gradient(to bottom, transparent, #00ffff)', margin: '1rem auto' }}></div>
             </div>
         </div>

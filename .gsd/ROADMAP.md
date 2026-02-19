@@ -58,27 +58,28 @@
 > **Goal**: Transform the homepage into a high-performance, interactive 3D command center with spaceship aesthetics and advanced GSAP animations.
 
 ### Phase 1: Optimization & Core Setup
-**Status**: ⬜ Not Started
-**Objective**: Improve performance and prepare the scene for advanced features.
+**Status**: ✅ Completed
+**Considerations**: optimization of `Scene.jsx` and `HUD` logic.
 - Audit current 3D performance (draw calls, poly count).
 - Implement Dracos/Meshopt compression.
 - Optimize textures (WebP, lower res where possible).
-- Implement proper `Dispose` logic for React Three Fiber.
+- [x] Implement proper `Dispose` logic for React Three Fiber (Verified in `Scene.jsx`).
 
 ### Phase 2: User Interface (HUD)
-**Status**: ⬜ Not Started
+**Status**: ✅ Completed
 **Objective**: Build the 2D "Spaceship" overlay.
-- Create `HUDOverlay` component (SVG/HTML).
-- Design sci-fi frames/brackets (using existing `SharedStyles` aesthetic but elevated).
-- Add interactive HUD elements (e.g., rotating rings, data streams).
+- [x] Create `HUDOverlay` component (SVG/HTML).
+- [x] Design sci-fi frames/brackets (FrameCorners, HUDDecoration).
+- [x] Add interactive HUD elements (Compass, DataStreams).
+- [x] Fix visibility and pitch reactivity issues.
 
 ### Phase 3: Interactive Sphere 2.0
-**Status**: ⬜ Not Started
+**Status**: ✅ Completed
 **Objective**: Revamp the 3D navigation points.
-- Map specific 3D coordinates to routes.
-- Create `FeaturePoint` component with `Html` annotations (drei).
-- Implement "Floating Bubble" design for tooltips.
-- Ensure color contrast and visibility (Neon Cyan/Magenta/Green).
+- [x] Map specific 3D coordinates to routes (Tetrahedral distribution).
+- [x] Create `FeaturePoint` component with `Html` annotations (drei).
+- [x] Implement "Floating Bubble" design for tooltips (Sci-Fi Glassmorphism).
+- [x] Ensure color contrast and visibility (Neon Colors, 2px thickness).
 
 ### Phase 4: Advanced Animations (WOW Factor)
 **Status**: ⬜ Not Started

@@ -47,7 +47,7 @@ const About = () => {
                         {/* PHOTO - Moved above text */}
                         <div className={styles.photoFrame} style={{ maxWidth: '300px', width: '100%', aspectRatio: '1/1' }}>
                             <img
-                                src="/photo.jpeg"
+                                src="/photo.jpeg?v=2"
                                 alt="Mateusz Parol"
                                 loading="lazy"
                                 decoding="async"

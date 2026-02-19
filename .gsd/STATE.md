@@ -1,13 +1,8 @@
-# State: DEBUGGING (Machine Handoff)
-
-**Milestone:** v2.0 - Immersive Homepage
-**Micro-Phase:** Phase 1 (Optimization) - Debugging
-**Current Issue:** Custom Shader Visibility
-
-## Active Context
-- **ParticleSphere**: Currently using fallback `PointsMaterial` (Visible Red Dots). Custom shader is broken on current hardware.
-- **Starfield**: Fixed (360 volume).
-- **Performance**: Optimized (CPU loop removed, Images lazy loaded, filters removed).
-
-## Next Session Goal
-Resume debugging `ParticleSphereShader.js` on the new machine following `DEBUG_HANDOFF.md`.
+## Last Session Summary
+Phase 3 (Interactive Sphere) completed.
+- **Features**: 
+    - Implemented `FeaturePoint` with 3D sphere core, rotating cage, and glassmorphism tooltip.
+    - Updated `points.js` with tetrahedral distribution for even coverage.
+    - Added 'Offer' route and fixed navigation logic in `Scene.jsx`.
+    - Removed legacy cluster particles for cleaner look.
+- **Status**: Scene is interactive and fully navigable.

@@ -1,17 +1,15 @@
-## Phase 2 Decisions (Refinement)
 
-**Date:** 2026-02-16
+## Phase 2 Decisions (Bug Fix: Invisible HUD Grids)
+
+**Date:** 2026-02-19
 
 ### Scope
--   **Redesign Case Studies**: Switch from Grid Layout to **Master-Detail Layout**.
--   **Sidebar**: Left column list of project titles.
--   **Detail View**: Center/Right column displaying the full selected project.
--   **Auto-Select**: Select the first (newest) item on load.
+- Fix invisible side grids (left/right ladders) in HUD.
+- Ensure they are visible on all screen sizes.
 
 ### Approach
--   **Layout**: CSS Grid `250px 1fr`.
--   **Mobile**: Stacked layout (List on top, or collapsible).
--   **Sorting**: Sort by `_createdAt` desc (newest first).
+- **CSS Fix**: Add explicit `width` (e.g., `40px`) to `.leftGrid` and `.rightGrid` in `HUD.module.css`.
+- **Reason**: The containers were collapsing to 0 width because all children were absolute positioned, and `overflow: hidden` was clipping them.
 
 ### Constraints
--   Maintain "Sci-Fi" aesthetic (e.g., active item in sidebar glows).
+- Must remain compatible with existing `transform` logic for pitch.

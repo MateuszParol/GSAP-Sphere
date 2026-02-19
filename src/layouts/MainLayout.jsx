@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../components/UI/Navbar';
 import GlitchOverlay from '../components/UI/GlitchOverlay';
+import LoadingScreen from '../components/UI/LoadingScreen'; // Import LoadingScreen
 import TransitionLink from '../components/UI/TransitionLink';
+import HUDOverlay from '../components/HUD/HUDOverlay';
 import { useTransition } from '../utils/TransitionContext';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -10,6 +12,9 @@ const MainLayout = () => {
     const location = useLocation();
     const { isGlitching } = useTransition();
     const isHome = location.pathname === '/';
+
+    // System Boot State
+    const [isSystemReady, setIsSystemReady] = useState(false);
 
     // "Return to Map" button styles
     const returnBtnStyles = {
@@ -33,10 +38,19 @@ const MainLayout = () => {
 
     return (
         <div className="app-container">
-            <GlitchOverlay active={isGlitching} />
-            <Navbar />
+            {/* 1. Loading Screen (Only on first load, check session storage? For now, every refresh) */}
+            {!isSystemReady && <LoadingScreen onComplete={() => setIsSystemReady(true)} />}
 
-            <AnimatePresence mode="wait">
+            {/* 2. UI Overlays - Only show HUD when system is ready to trigger entry animation */}
+            <GlitchOverlay active={isGlitching} />
+            <HUDOverlay active={isHome && isSystemReady} />
+
+            {/* 3. Navbar - Fade in after load? */}
+            <div style={{ position: 'relative', zIndex: 2000, pointerEvents: 'auto', opacity: isSystemReady ? 1 : 0, transition: 'opacity 1s ease' }}>
+                <Navbar />
+            </div>
+
+            <AnimatePresence>
                 <motion.main
                     key={location.pathname}
                     initial={{ opacity: 0, filter: 'blur(10px)' }}
@@ -44,7 +58,7 @@ const MainLayout = () => {
                         opacity: 1,
                         filter: 'blur(0px)',
                         transition: {
-                            delay: 0.3, // Wait for glitch (approx 300ms post-nav)
+                            delay: 0.3,
                             duration: 0.8,
                             ease: 'easeOut'
                         }
@@ -55,7 +69,8 @@ const MainLayout = () => {
                         transition: { duration: 0.1 }
                     }}
                 >
-                    <Outlet />
+                    {/* Pass system state to children (Home/Scene) */}
+                    <Outlet context={{ isSystemReady }} />
                 </motion.main>
             </AnimatePresence>
 
